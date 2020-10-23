@@ -19,7 +19,7 @@ AudioVisualizersAudioProcessor::AudioVisualizersAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       ), visualizer(2, 2, OVERLAY_INPUTS_AND_OUTPUTS, audioVisualizerColors)
+                       )
 #endif
 {
 
@@ -96,7 +96,6 @@ void AudioVisualizersAudioProcessor::prepareToPlay (double sampleRate, int sampl
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-    visualizer.clear();
 }
 
 void AudioVisualizersAudioProcessor::releaseResources()
@@ -135,6 +134,8 @@ void AudioVisualizersAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
+    int newTotalChannels = totalNumInputChannels; //+ totalNumOutputChannels;
+
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
     // guaranteed to be empty - they may contain garbage).
@@ -157,7 +158,17 @@ void AudioVisualizersAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         // ..do something to the data...
     }*/
 
-    visualizer.pushBuffer(buffer);
+    // only do anything with visualizer if it's safe (not actively being re-assigned)
+    std::unique_lock<spin_lock> tryLock(mutex, std::try_to_lock);
+    if (tryLock.owns_lock()) {
+        if (visualizerPtr != nullptr) {
+            if (newTotalChannels != totalChannels) // buffer (itself) is only 2-channels
+                (*visualizerPtr)->setNumChannels(newTotalChannels);// + totalNumOutputChannels);
+            (*visualizerPtr)->pushBuffer(buffer);
+        }
+    }
+
+    totalChannels = newTotalChannels;
 }
 
 //==============================================================================
@@ -168,7 +179,7 @@ bool AudioVisualizersAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* AudioVisualizersAudioProcessor::createEditor()
 {
-    return new AudioVisualizersAudioProcessorEditor (*this, this->visualizer);
+    return new AudioVisualizersAudioProcessorEditor (*this);
 }
 
 //==============================================================================
@@ -190,4 +201,9 @@ void AudioVisualizersAudioProcessor::setStateInformation (const void* data, int 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new AudioVisualizersAudioProcessor();
+}
+
+void AudioVisualizersAudioProcessor::setVisualizerPointer(juce::AudioVisualiserComponent* visualizerPtr) {
+    std::lock_guard<spin_lock> lock(mutex); // un-locks mutex once out of scope
+    this->visualizerPtr = std::make_unique<juce::AudioVisualiserComponent*>(visualizerPtr);
 }

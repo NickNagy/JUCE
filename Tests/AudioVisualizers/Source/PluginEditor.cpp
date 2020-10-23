@@ -10,18 +10,25 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-AudioVisualizersAudioProcessorEditor::AudioVisualizersAudioProcessorEditor (AudioVisualizersAudioProcessor& p, AudioVisualizer& v)
-    : AudioProcessorEditor (&p), audioProcessor (p), visualizer(v)
+AudioVisualizersAudioProcessorEditor::AudioVisualizersAudioProcessorEditor (AudioVisualizersAudioProcessor& p)
+    : AudioProcessorEditor (&p), audioProcessor (p), visualizer(2)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (400, 300);
 
     addAndMakeVisible(visualizer);
+
+    // clear buffer here instead of in prepareToPlay() as editor could be opened/closed at any time
+    visualizer.clear();
+
+    // share visualizer component with processor
+    audioProcessor.setVisualizerPointer(&visualizer);
 }
 
 AudioVisualizersAudioProcessorEditor::~AudioVisualizersAudioProcessorEditor()
 {
+    audioProcessor.setVisualizerPointer(nullptr);
 }
 
 //==============================================================================

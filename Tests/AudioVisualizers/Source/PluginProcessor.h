@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "AudioVisualizers.h"
+#include "ThreadFunctions.h"//spin_lock
 
 //==============================================================================
 /**
@@ -54,9 +55,15 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    void setVisualizerPointer(juce::AudioVisualiserComponent* visualizerPtr);
+
 private:
     //==============================================================================
     std::vector<juce::Colour> audioVisualizerColors{juce::Colours::black, juce::Colours::green, juce::Colours::cyan, juce::Colours::orange, juce::Colours::purple};
-    AudioVisualizer visualizer;
+    std::unique_ptr<juce::AudioVisualiserComponent*> visualizerPtr; //= nullptr;
+
+    spin_lock mutex;
+    int totalChannels = 2;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioVisualizersAudioProcessor)
 };

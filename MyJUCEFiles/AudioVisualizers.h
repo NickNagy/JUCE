@@ -7,6 +7,8 @@
 #define OVERLAY_CHANNELS              2
 #define OVERLAY_ALL                   3
 
+/* AUDIO VISUALIZER */
+
 class AudioVisualizer : public juce::AudioVisualiserComponent {
 public:
 
@@ -108,4 +110,19 @@ private:
             paintChannel(g, area, c->levels.begin(), c->levels.size(), c->nextSample);
         }
     }
+};
+
+/* FREQUENCY VISUALIZER */
+
+class FrequencyVisualizer : public AudioVisualizer {
+public:
+    FrequencyVisualizer() {}
+    ~FrequencyVisualizer() override {}
+
+    void paintChannel(juce::Graphics& g, juce::Rectangle<float> area, const juce::Range<float>* levels, int numLevels, int nextSample) override {
+    
+    }
+
+private:
+    bool ready = false;
 };
