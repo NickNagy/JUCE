@@ -15,12 +15,12 @@
 //==============================================================================
 /**
 */
-class AudioVisualizersAudioProcessor  : public juce::AudioProcessor
+class AudioVisualisersAudioProcessor  : public juce::AudioProcessor
 {
 public:
     //==============================================================================
-    AudioVisualizersAudioProcessor();
-    ~AudioVisualizersAudioProcessor() override;
+    AudioVisualisersAudioProcessor();
+    ~AudioVisualisersAudioProcessor() override;
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -55,17 +55,17 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    void setVisualizerPointer(juce::AudioVisualiserComponent* visualizerPtr);
+    void setVisualiserPointer(AudioVisualiser* visualiserPtr);
 
 private:
     //==============================================================================
     std::vector<juce::Colour> audioVisualizerColors{juce::Colours::black, juce::Colours::green, juce::Colours::cyan, juce::Colours::orange, juce::Colours::purple};
-    std::unique_ptr<juce::AudioVisualiserComponent*> visualizerPtr; //= nullptr;
+    std::unique_ptr<AudioVisualiser*> visualiserPtr;
 
     spin_lock mutex;
     int totalChannels = 2;
 
     bool bufferReadyToBePushed = false;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioVisualizersAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioVisualisersAudioProcessor)
 };

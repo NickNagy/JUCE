@@ -7,36 +7,48 @@
 #define OVERLAY_CHANNELS              2
 #define OVERLAY_ALL                   3
 
-/* AUDIO VISUALIZER */
+/* TODO: abandon AudioVisualiserComponent as a base class. Make a virtual base for ChannelInfo, and make a new virtual base class similar to AudioVisualiserComponent:
+           - 4 channel colors, 1 background color; functions setChannelColour() and setBackgroundColour()
+           - keep paint() same as AudioVisualiser. Change paintChannel()
+           - ChannelInfo needs to be different for FFT functioning visualizers
+*/
 
-class AudioVisualizer : public juce::AudioVisualiserComponent {
+/* AUDIO VISUALISER */
+
+class AudioVisualiser : public juce::AudioVisualiserComponent {
 public:
 
-    AudioVisualizer() : AudioVisualiserComponent(2) {
+    AudioVisualiser() : AudioVisualiserComponent(2) {
         numInputChannels = 2;
         numOutputChannels = 0;
         overlayChannels = NO_OVERLAY;
-        componentColors = { juce::Colours::black, juce::Colours::seagreen, juce::Colours::cyan };
+        backgroundColour = juce::Colours::black;
         setBufferSize(512);
         setSamplesPerBlock(256);
     }
 
-    AudioVisualizer(int numInputChannels, int numOutputChannels, std::uint8_t overlayChannels, std::vector<juce::Colour>& componentColors) : 
-            AudioVisualiserComponent(numInputChannels + numOutputChannels), componentColors(componentColors), overlayChannels(overlayChannels),
+    AudioVisualiser(int numInputChannels, int numOutputChannels, std::uint8_t overlayChannels) : 
+            AudioVisualiserComponent(numInputChannels + numOutputChannels), overlayChannels(overlayChannels),
             numInputChannels(numInputChannels), numOutputChannels(numOutputChannels) 
     {
         setBufferSize(512);
         setSamplesPerBlock(256);
     }
 
-    ~AudioVisualizer() override {}
+    ~AudioVisualiser() override {}
 
-    void setColours(std::vector<juce::Colour>& componentColors) {
-        this->componentColors = componentColors;
+    void setBackgroundColour(juce::Colour colour) {
+        backgroundColour = colour;
+    }
+
+    void setChannelColour(unsigned int channel, juce::Colour colour) {
+        jassert(channel < 4);
+        // doesn't check to see if channel is out of range of current channels. Will keep this color saved in case the channel gets added later
+        channelColours[channel] = colour;
     }
 
     void paint(juce::Graphics& g) override {
-        g.fillAll(componentColors.at(0));
+        g.fillAll(backgroundColour);
 
         auto r = getLocalBounds().toFloat();
 
@@ -62,22 +74,25 @@ public:
 private:
     int numInputChannels, numOutputChannels;
     std::uint8_t overlayChannels = NO_OVERLAY;
-    std::vector<juce::Colour> componentColors;
+    juce::Colour channelColours[4] = { juce::Colours::seagreen, juce::Colours::blue, juce::Colours::red, juce::Colours::purple };
+    //std::vector<juce::Colour> componentColors;
 
     void paintNoOverlay(juce::Graphics& g, juce::Rectangle<float>& area) {
         auto channelHeight = area.getHeight() / (float)(numInputChannels + numOutputChannels);
         auto channelColorIndex = 1;
         for (auto* c : channels) {
-            g.setColour(componentColors.at(channelColorIndex++));
+            g.setColour(channelColours[channelColorIndex++]);//componentColors.at(channelColorIndex++));
             paintChannel(g, area.removeFromTop(channelHeight), c->levels.begin(), c->levels.size(), c->nextSample);
         }
     }
+
+    // TODO: can potentially save computation time by NOT painting pixels that are already painted over?
 
     void paintOverlayedIO(juce::Graphics& g, juce::Rectangle<float>& area) {
         auto channelHeight = (numInputChannels && numOutputChannels) ? 0.5f * area.getHeight() : area.getHeight();
         auto channelColorIndex = 1;
         for (auto* c : channels) {
-            g.setColour(componentColors.at(channelColorIndex));
+            g.setColour(channelColours[channelColorIndex]);//componentColors.at(channelColorIndex));
             if (channelColorIndex < numInputChannels - 1) { /* don't want to remove top from r yet, so instead I pass a new rectangle with proper dimensions */
                 paintChannel(g, juce::Rectangle<float>(area.getX(), area.getY(), area.getWidth(), channelHeight), c->levels.begin(), c->levels.size(), c->nextSample);
             }
@@ -96,7 +111,7 @@ private:
         int numWindows = (numInputChannels > numOutputChannels) ? numInputChannels : numOutputChannels;
         auto channelColorIndex = 1;
         for (auto* c : channels) {
-            g.setColour(componentColors.at(channelColorIndex));
+            g.setColour(channelColours[channelColorIndex]);//componentColors.at(channelColorIndex));
             /* (channelColorIndex % numWindows) tells us which window to paint channel in */
             paintChannel(g, juce::Rectangle<float>(area.getX(), area.getY() + channelHeight * (channelColorIndex % numWindows), area.getWidth(), channelHeight), c->levels.begin(), c->levels.size(), c->nextSample);
             channelColorIndex++;
@@ -106,18 +121,18 @@ private:
     void paintAllOverlayed(juce::Graphics& g, juce::Rectangle<float>& area) {
         auto channelColorIndex = 1;
         for (auto* c : channels) {
-            g.setColour(componentColors.at(channelColorIndex++));
+            g.setColour(channelColours[channelColorIndex++]);//componentColors.at(channelColorIndex++));
             paintChannel(g, area, c->levels.begin(), c->levels.size(), c->nextSample);
         }
     }
 };
 
-/* FREQUENCY VISUALIZER */
+/* FREQUENCY VISUALISER */
 
-class FrequencyVisualizer : public AudioVisualizer {
+class FrequencyVisualiser : public AudioVisualiser {
 public:
-    FrequencyVisualizer() {}
-    ~FrequencyVisualizer() override {}
+    FrequencyVisualiser() {}
+    ~FrequencyVisualiser() override {}
 
     void paintChannel(juce::Graphics& g, juce::Rectangle<float> area, const juce::Range<float>* levels, int numLevels, int nextSample) override {
     

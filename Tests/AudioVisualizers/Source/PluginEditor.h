@@ -14,11 +14,11 @@
 //==============================================================================
 /**
 */
-class AudioVisualizersAudioProcessorEditor  : public juce::AudioProcessorEditor
+class AudioVisualisersAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 public:
-    AudioVisualizersAudioProcessorEditor (AudioVisualizersAudioProcessor&);
-    ~AudioVisualizersAudioProcessorEditor() override;
+    AudioVisualisersAudioProcessorEditor (AudioVisualisersAudioProcessor&);
+    ~AudioVisualisersAudioProcessorEditor() override;
 
     //==============================================================================
     void paint (juce::Graphics&) override;
@@ -27,9 +27,8 @@ public:
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    AudioVisualizersAudioProcessor& audioProcessor;
-    juce::AudioVisualiserComponent visualizer;
-    //AudioVisualizer visualizer;
+    AudioVisualisersAudioProcessor& audioProcessor;
+    AudioVisualiser visualiser;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioVisualizersAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioVisualisersAudioProcessorEditor)
 };

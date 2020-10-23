@@ -10,29 +10,31 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-AudioVisualizersAudioProcessorEditor::AudioVisualizersAudioProcessorEditor (AudioVisualizersAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p), visualizer(2)
+AudioVisualisersAudioProcessorEditor::AudioVisualisersAudioProcessorEditor (AudioVisualisersAudioProcessor& p)
+    : AudioProcessorEditor (&p), audioProcessor (p), visualiser(2, 2, NO_OVERLAY)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (400, 300);
+    setSize (800, 300);
 
-    addAndMakeVisible(visualizer);
+    addAndMakeVisible(visualiser);
 
     // clear buffer here instead of in prepareToPlay() as editor could be opened/closed at any time
-    visualizer.clear();
+    visualiser.clear();
+    visualiser.setSamplesPerBlock(64);
+    visualiser.setRepaintRate(20);
 
     // share visualizer component with processor
-    audioProcessor.setVisualizerPointer(&visualizer);
+    audioProcessor.setVisualiserPointer(&visualiser);
 }
 
-AudioVisualizersAudioProcessorEditor::~AudioVisualizersAudioProcessorEditor()
+AudioVisualisersAudioProcessorEditor::~AudioVisualisersAudioProcessorEditor()
 {
-    audioProcessor.setVisualizerPointer(nullptr);
+    audioProcessor.setVisualiserPointer(nullptr);
 }
 
 //==============================================================================
-void AudioVisualizersAudioProcessorEditor::paint (juce::Graphics& g)
+void AudioVisualisersAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
@@ -40,13 +42,13 @@ void AudioVisualizersAudioProcessorEditor::paint (juce::Graphics& g)
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
 
-    visualizer.paint(g);
+    visualiser.paint(g);
 }
 
-void AudioVisualizersAudioProcessorEditor::resized()
+void AudioVisualisersAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
     int offset = 10;
-    visualizer.setBounds(offset, offset, getWidth() - (offset<<1), getHeight() - (offset<<1));
+    visualiser.setBounds(offset, offset, getWidth() - (offset<<1), getHeight() - (offset<<1));
 }
