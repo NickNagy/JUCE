@@ -65,5 +65,7 @@ private:
     spin_lock mutex;
     int totalChannels = 2;
 
+    bool bufferReadyToBePushed = false;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioVisualizersAudioProcessor)
 };

@@ -128,13 +128,17 @@ bool AudioVisualizersAudioProcessor::isBusesLayoutSupported (const BusesLayout& 
 }
 #endif
 
-void AudioVisualizersAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+void AudioVisualizersAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels  = getTotalNumInputChannels();
+    auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
+    auto numSamples = buffer.getNumSamples();
+    int newTotalChannels = totalNumInputChannels + totalNumOutputChannels;
 
-    int newTotalChannels = totalNumInputChannels; //+ totalNumOutputChannels;
+    /* using this buffer to write to output w/o writing over input yet */
+    juce::AudioBuffer<float> bufferInOutSplit(newTotalChannels, numSamples);
+    bufferInOutSplit.clear();
 
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
@@ -142,8 +146,9 @@ void AudioVisualizersAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     // This is here to avoid people getting screaming feedback
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
-    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
+    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i) {
+        buffer.clear(i, 0, numSamples);
+    }
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
@@ -151,12 +156,15 @@ void AudioVisualizersAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
-    /*for (int channel = 0; channel < totalNumInputChannels; ++channel)
+    for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         auto* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
-    }*/
+        bufferInOutSplit.copyFrom(channel, 0, buffer.getReadPointer(channel), numSamples);
+        // do things to output...
+        if (channel + totalNumInputChannels < totalChannels - 1) { // if corresponding output channel exists...
+            bufferInOutSplit.copyFrom(channel + totalNumInputChannels, 0, channelData, numSamples); // copy to bufferInOutSplit
+        }
+    }
 
     // only do anything with visualizer if it's safe (not actively being re-assigned)
     std::unique_lock<spin_lock> tryLock(mutex, std::try_to_lock);
@@ -164,7 +172,7 @@ void AudioVisualizersAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         if (visualizerPtr != nullptr) {
             if (newTotalChannels != totalChannels) // buffer (itself) is only 2-channels
                 (*visualizerPtr)->setNumChannels(newTotalChannels);// + totalNumOutputChannels);
-            (*visualizerPtr)->pushBuffer(buffer);
+            (*visualizerPtr)->pushBuffer(bufferInOutSplit);
         }
     }
 
