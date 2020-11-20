@@ -18,11 +18,10 @@ WoflmakerAudioProcessorEditor::WoflmakerAudioProcessorEditor (WoflmakerAudioProc
     setSize (200, 600);
 
     // pan width
-    panWidthSlider.setSliderStyle(juce::Slider::LinearHorizontal);
-    panWidthSlider.setRange(0, 2*MAX_PAN_ANGLE_MAGNITUDE, 2);
-    panWidthSlider.setTextValueSuffix("°");
-    //panWidthSlider.addListener(&panCenterSlider);
-    panWidthSliderListener.reset(new AudioProcessorValueTreeStateExtended::SliderAttachment(params, "width", panWidthSlider));
+    panWidthSlider;//.setSliderStyle(juce::Slider::LinearHorizontal);
+    panWidthSlider.setRange(0, 2*PAN_MAX_MAGNITUDE, 2);
+    panWidthSlider.addListener(&testRotarySlider);
+    panWidthSliderListener.reset(new AudioProcessorValueTreeStateExtended::RotarySliderAttachment(params, "width", panWidthSlider));
     addAndMakeVisible(panWidthSlider);
 
     //test
@@ -65,24 +64,21 @@ void WoflmakerAudioProcessorEditor::resized()
     // todo
     bpmLabel.setBounds(0.5f * (width - textBoxWidth), height - textBoxHeight - 5, textBoxWidth, textBoxHeight);
 
-    // row for horizontal sliders
-    int hSliderOffset = 10;
-    int hSliderRowHeight = 60;
-    panWidthSlider.setBounds(hSliderOffset * 0.5f, hSliderOffset * 0.5f, width - hSliderOffset, hSliderRowHeight - textBoxHeight - hSliderOffset);
-    panWidthSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, textBoxWidth, textBoxHeight);
-
-    height -= hSliderRowHeight;
-    auto rSliderRowHeight = 0.5f * height; // 2 rows
+    auto rSliderRowHeight = 0.33f * height; // 2 rows
 
     // for choosing radius of slider
     int rSliderOffset = 10;
     auto radius = (width > rSliderRowHeight - textBoxHeight) ? (rSliderRowHeight - textBoxHeight - rSliderOffset)*0.5f : (width - rSliderOffset)*0.5f;
     
     int sliderX = 0.5f * width - radius;
-    int topSliderY = hSliderRowHeight + (0.25f * height - radius);
-    int bottomSliderY = hSliderRowHeight + (0.75f*height - radius);
+    int topSliderY = 0.16f * height - radius;
+    int midSliderY = 0.5f * height - radius;
+    int bottomSliderY = 0.84f*height - radius;
 
-    testRotarySlider.setBounds(sliderX, topSliderY, 2 * radius, 2 * radius);
+    panWidthSlider.setBounds(sliderX, topSliderY, 2 * radius, 2 * radius);
+    panWidthSlider.setTextBoxStyle(RotarySlider::TextBoxBelow, true, textBoxWidth, textBoxHeight);
+
+    testRotarySlider.setBounds(sliderX, midSliderY, 2 * radius, 2 * radius);
     testRotarySlider.setTextBoxStyle(RotarySlider::TextBoxBelow, true, textBoxWidth, textBoxHeight);
 
     panLFOSlider.setBounds(sliderX, bottomSliderY, 2 * radius, 2 * radius);

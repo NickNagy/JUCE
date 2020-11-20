@@ -6,7 +6,7 @@
 /* these classes are based on the juce::Slider class, but are customized to an extent that inheriting from juce::Slider is not sufficient */
 /* parts of the code are taken from the juce::Slider class directly */
 
-class RotarySlider : public juce::Component, private juce::Value::Listener, public juce::AsyncUpdater {
+class RotarySlider : public juce::Component, protected juce::Value::Listener, public juce::AsyncUpdater {
 public:
 	enum TextEntryBoxPosition
 	{
@@ -190,6 +190,7 @@ public:
 					currentValue = newValue;
 				updateText();
 				repaint();
+				triggerChangeMessage(notification);
 			}
 		}
 	}
@@ -214,6 +215,13 @@ public:
 		double newInterval = 0) {
 		normRange = juce::NormalisableRange<double>(newMinimum, newMaximum, newInterval);
 		updateRange();
+	}
+
+	void setTextValueSuffix(const juce::String& suffix) {
+		if (suffix != textSuffix) {
+			textSuffix = suffix;
+			updateText();
+		}
 	}
 
 	/** Sets the limits that the slider's value can take.
@@ -496,6 +504,16 @@ public:
 		}
 	}
 
+	void triggerChangeMessage(juce::NotificationType notification) {
+		if (notification != juce::dontSendNotification) {
+			valueChanged();
+			if (notification == juce::sendNotificationSync)
+				handleAsyncUpdate();
+			else
+				triggerAsyncUpdate();
+		}
+	}
+
 	//==============================================================================
 	/** @internal */
 	void paint(juce::Graphics& g) override {
@@ -539,8 +557,9 @@ public:
 	void mouseUp(const juce::MouseEvent&) override {
 		if (isEnabled() && useDragEvents && (normRange.end > normRange.start)) {
 			restoreMouseIfHidden();
+			
 			//if (sendChangeOnlyOnRelease && valueOnMouseDown != static_cast<double> (currentValue.getValue())) {
-			//
+			//	triggerChangeMessage(juce::sendNotificationAsync);
 			//}
 		}
 		currentDrag.reset();
@@ -714,7 +733,13 @@ protected:
 
 	void updateRange() {
 		numDecimalPlaces = 7;
-		if (normRange.interval != 0.0) { // TODO
+		if (normRange.interval != 0.0) { 
+			int v = std::abs(juce::roundToInt(normRange.interval * 10000000));
+			while ((v % 10) == 0 && numDecimalPlaces > 0)
+			{
+				--numDecimalPlaces;
+				v /= 10;
+			}
 		}
 		setValue(getValue(), juce::dontSendNotification);
 		updateText();
@@ -837,7 +862,8 @@ protected:
 			while (angle < 0.0) {
 				angle += juce::MathConstants<double>::twoPi;
 			}
-			if (rotaryParams.stopAtEnd && e.mouseWasDraggedSinceMouseDown())
+			angle = limitAngleForRotaryDrag(e, angle, rotaryParams.startAngleRadians, rotaryParams.endAngleRadians);
+			/*if (rotaryParams.stopAtEnd && e.mouseWasDraggedSinceMouseDown())
 			{
 				if (std::abs(angle - lastAngle) > juce::MathConstants<double>::pi)
 				{
@@ -865,21 +891,68 @@ protected:
 					else
 						angle = rotaryParams.endAngleRadians;
 				}
-			}
+			}*/
 
 			auto proportion = (angle - rotaryParams.startAngleRadians) / (rotaryParams.endAngleRadians - rotaryParams.startAngleRadians);
 			valueWhenLastDragged = proportionOfLengthToValue(juce::jlimit(0.0, 1.0, proportion));
 			lastAngle = angle;
 		}
 	}
+
+	double limitAngleForRotaryDrag(const juce::MouseEvent& e, double angle, float minLegalAngle, float maxLegalAngle) {
+		if (rotaryParams.stopAtEnd && e.mouseWasDraggedSinceMouseDown()) {
+			if (std::abs(angle - lastAngle) > juce::MathConstants<double>::pi) {
+				if (angle >= lastAngle) {
+					angle -= juce::MathConstants<double>::twoPi;
+				}
+				else {
+					angle += juce::MathConstants<double>::twoPi;
+				}
+			}
+			if (angle >= lastAngle) {
+				angle = juce::jmin(angle, (double)juce::jmax(minLegalAngle, maxLegalAngle));
+			}
+			else {
+				angle = juce::jmax(angle, (double)juce::jmin(minLegalAngle, maxLegalAngle));
+			}
+		}
+		else {
+			while (angle < minLegalAngle) {
+				angle += juce::MathConstants<double>::twoPi;
+			}
+			if (angle > maxLegalAngle) {
+				if (smallestAngleBetween(angle, minLegalAngle) <= smallestAngleBetween(angle, maxLegalAngle)) {
+					angle = minLegalAngle;
+				}
+				else {
+					angle = maxLegalAngle;
+				}
+			}
+		}
+		return angle;
+	}
 private:
 
 };
 
-class PanRotarySlider : public RotarySlider {
+#define PAN_MAX_MAGNITUDE 100
+
+class PanRotarySlider : public RotarySlider, public RotarySlider::Listener {
 public:
-	PanRotarySlider() {};
-	~PanRotarySlider() override {};
+	PanRotarySlider();
+	~PanRotarySlider() override;
+	void sliderValueChanged(RotarySlider*) override;
+
+protected:
+	void drawRotarySlider(juce::Graphics& g, float sliderPos) override;
+	void handleRotaryDrag(const juce::MouseEvent& e) override;
+private:
+	// these are used if the slider range is being controlled by a second rotary slider
+	bool hasExternalWidthController = false;
+	juce::Value minValue, maxValue;
+	
+	int thumbMinLegalValue = -PAN_MAX_MAGNITUDE;
+	int thumbMaxLegalValue = PAN_MAX_MAGNITUDE;
 };
 
 #endif

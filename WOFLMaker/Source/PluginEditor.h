@@ -13,10 +13,6 @@
 #include "RotarySliders.h"
 #include "AudioProcessorValueTreeStateExtended.h"
 
-#define MAX_PAN_ANGLE_MAGNITUDE 45.0f
-#define DEGREES_TO_RADIANS(d) d*juce::MathConstants<double>::pi/180.0
-#define RADIANS_TO_DEGREES(r) r*180.0/juce::MathConstants<double>::pi;
-
 class LFOSliderListenerLabel : public juce::Slider::Listener, public juce::Label {
 public:
     LFOSliderListenerLabel() {
@@ -48,15 +44,16 @@ private:
     // access the processor object that created it.
     WoflmakerAudioProcessor& audioProcessor;
 
-    juce::Slider panWidthSlider, panLFOSlider;
+    juce::Slider panLFOSlider;
     //PanRotarySlider panCenterSlider;
 
-    RotarySlider testRotarySlider;
+    RotarySlider panWidthSlider; 
+    PanRotarySlider testRotarySlider;
 
     juce::ToggleButton panWidthLFOToggle, panLFOToggle;
     LFOSliderListenerLabel bpmLabel;
-    std::unique_ptr<AudioProcessorValueTreeStateExtended::SliderAttachment> panWidthSliderListener, panCenterSliderListener, panLFOSliderListener;
-    std::unique_ptr<AudioProcessorValueTreeStateExtended::RotarySliderAttachment> testRotarySliderListener;
+    std::unique_ptr<AudioProcessorValueTreeStateExtended::SliderAttachment> panCenterSliderListener, panLFOSliderListener;
+    std::unique_ptr<AudioProcessorValueTreeStateExtended::RotarySliderAttachment> panWidthSliderListener, testRotarySliderListener;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WoflmakerAudioProcessorEditor)
 };
