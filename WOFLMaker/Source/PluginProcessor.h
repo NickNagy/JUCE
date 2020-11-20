@@ -9,18 +9,17 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "AudioVisualizers.h"
-#include "ThreadFunctions.h"//spin_lock
+#include "AudioProcessorValueTreeStateExtended.h"
 
 //==============================================================================
 /**
 */
-class AudioVisualisersAudioProcessor  : public juce::AudioProcessor
+class WoflmakerAudioProcessor  : public juce::AudioProcessor
 {
 public:
     //==============================================================================
-    AudioVisualisersAudioProcessor();
-    ~AudioVisualisersAudioProcessor() override;
+    WoflmakerAudioProcessor();
+    ~WoflmakerAudioProcessor() override;
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -55,16 +54,15 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    void setVisualiserPointer(AudioVisualiser* visualiserPtr);
-
 private:
     //==============================================================================
-    std::vector<juce::Colour> audioVisualizerColors{juce::Colours::black, juce::Colours::green, juce::Colours::cyan, juce::Colours::orange, juce::Colours::purple};
-    std::unique_ptr<AudioVisualiser*> visualiserPtr;
-    spin_lock mutex;
-    int totalChannels = 2;
+    AudioProcessorValueTreeStateExtended tree;
+    static constexpr size_t lfoUpdateRate = 100;
+    size_t lfoUpdateCounter = lfoUpdateRate;
+    juce::dsp::Oscillator<float> panLFO, lpfLFO, hpfLFO;
 
-    bool bufferReadyToBePushed = false;
+    juce::HeapBlock<char> heapBlock;
+    juce::dsp::AudioBlock<float> tempBlock;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioVisualisersAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WoflmakerAudioProcessor)
 };

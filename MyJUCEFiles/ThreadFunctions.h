@@ -5,15 +5,15 @@
 // source: https://www.youtube.com/watch?v=Q0vrQFyAdWI&t=130s&ab_channel=JUCE
 class spin_lock {
 public:
-	void lock() {
+	void lock() noexcept {
 		while (flag.test_and_set()); //spins
 	}
 
-	void unlock() {
+	void unlock() noexcept {
 		flag.clear();
 	}
 
-	bool try_lock() {
+	bool try_lock() noexcept {
 		return !flag.test_and_set();
 	}
 
