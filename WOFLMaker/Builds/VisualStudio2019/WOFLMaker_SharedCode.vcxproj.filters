@@ -4826,9 +4826,6 @@
     <ClInclude Include="..\..\..\MyJUCEFiles\RotarySliders.h">
       <Filter>WOFLMaker\Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\MyJUCEFiles\AudioProcessorValueTreeStateExtended.h">
-      <Filter>WOFLMaker\Source</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\..\..\..\..\JUCE\modules\juce_audio_devices\native\oboe\CMakeLists.txt">

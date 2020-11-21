@@ -9,7 +9,8 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "AudioProcessorValueTreeStateExtended.h"
+#include "RotarySliders.h" // for PAN_MAX_MAGNITUDE
+// #include "AudioProcessorValueTreeStateExtended.h" <- don't use!
 
 //==============================================================================
 /**
@@ -56,10 +57,16 @@ public:
 
 private:
     //==============================================================================
-    AudioProcessorValueTreeStateExtended tree;
+    juce::AudioProcessorValueTreeState tree;
     static constexpr size_t lfoUpdateRate = 100;
     size_t lfoUpdateCounter = lfoUpdateRate;
-    juce::dsp::Oscillator<float> panLFO, lpfLFO, hpfLFO;
+    juce::dsp::Oscillator<float> panCenterLFO, panWidthLFO; //lpfLFO, hpfLFO;
+
+    std::atomic<float>* panCenterParameter, *panRateParameter, *panWidthParameter;
+
+    float previousGainL = 1.0;
+    float previousGainR = 1.0;
+    double oneOverPanMagnitude = (double)PAN_MAX_MAGNITUDE / 1.0;
 
     juce::HeapBlock<char> heapBlock;
     juce::dsp::AudioBlock<float> tempBlock;

@@ -11,7 +11,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "RotarySliders.h"
-#include "AudioProcessorValueTreeStateExtended.h"
+//#include "AudioProcessorValueTreeStateExtended.h" <- don't use!
 
 class LFOSliderListenerLabel : public juce::Slider::Listener, public juce::Label {
 public:
@@ -32,7 +32,7 @@ private:
 class WoflmakerAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 public:
-    WoflmakerAudioProcessorEditor (WoflmakerAudioProcessor&, AudioProcessorValueTreeStateExtended& params);
+    WoflmakerAudioProcessorEditor (WoflmakerAudioProcessor&, juce::AudioProcessorValueTreeState& params);
     ~WoflmakerAudioProcessorEditor() override;
 
     //==============================================================================
@@ -45,15 +45,16 @@ private:
     WoflmakerAudioProcessor& audioProcessor;
 
     juce::Slider panLFOSlider;
-    //PanRotarySlider panCenterSlider;
-
     RotarySlider panWidthSlider; 
-    PanRotarySlider testRotarySlider;
+    PanRotarySlider panCenterSlider;
 
     juce::ToggleButton panWidthLFOToggle, panLFOToggle;
     LFOSliderListenerLabel bpmLabel;
-    std::unique_ptr<AudioProcessorValueTreeStateExtended::SliderAttachment> panCenterSliderListener, panLFOSliderListener;
-    std::unique_ptr<AudioProcessorValueTreeStateExtended::RotarySliderAttachment> panWidthSliderListener, testRotarySliderListener;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> panLFOSliderListener;
+    std::unique_ptr<juce::ParameterAttachment> panWidthSliderListener, panCenterSliderListener;
+
+    juce::AudioParameterFloat* panCenterValue;
+    juce::ParameterAttachment panCenterSliderAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WoflmakerAudioProcessorEditor)
 };

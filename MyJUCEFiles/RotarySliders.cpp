@@ -17,6 +17,25 @@ PanRotarySlider::~PanRotarySlider() {
 	maxValue.removeListener(this);
 }
 
+void PanRotarySlider::setValue(double newValue, juce::NotificationType notification = juce::sendNotificationAsync) {
+	newValue = constrainedValue(newValue);
+	if (newValue != lastCurrentValue) {
+		if (valueBox != nullptr) {
+			valueBox->hideEditor(true);
+			lastCurrentValue = newValue;
+			if (currentValue != newValue) {
+				auto halfWidth = (float)maxValue.getValue() - (float)currentValue.getValue();
+				currentValue = newValue;
+				maxValue = newValue + halfWidth;
+				minValue = newValue - halfWidth;
+			}
+			updateText();
+			repaint();
+			triggerChangeMessage(notification);
+		}
+	}
+}
+
 void PanRotarySlider::drawRotarySlider(juce::Graphics&g, float sliderPos) {
 	auto width = sliderRect.getWidth();
 	auto height = sliderRect.getHeight();
@@ -94,8 +113,9 @@ void PanRotarySlider::handleRotaryDrag(const juce::MouseEvent& e) {
 		float maxLegalAngle = rotaryParams.endAngleRadians;
 
 		if(hasExternalWidthController && (maxValue.getValue() != minValue.getValue())) {
-			minLegalAngle = valueToProportionOfLength(-PAN_MAX_MAGNITUDE + (double)minValue.getValue());
-			maxLegalAngle = valueToProportionOfLength(PAN_MAX_MAGNITUDE - (double)maxValue.getValue());
+			auto halfWidthAngle = ((double)maxValue.getValue() - (double)currentValue.getValue()) / (rotaryParams.endAngleRadians - rotaryParams.startAngleRadians);
+			minLegalAngle = rotaryParams.startAngleRadians + halfWidthAngle; //valueToProportionOfLength(-PAN_MAX_MAGNITUDE + halfWidth);
+			maxLegalAngle = rotaryParams.endAngleRadians - halfWidthAngle;//valueToProportionOfLength(PAN_MAX_MAGNITUDE - halfWidth);
 		}
 
 		angle = limitAngleForRotaryDrag(e, angle, minLegalAngle, maxLegalAngle);

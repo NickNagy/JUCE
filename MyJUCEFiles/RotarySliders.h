@@ -180,7 +180,7 @@ public:
                                 of any Slider::Listeners that are registered. A notification will
                                 only be sent if the Slider's value has changed.
     */
-	void setValue(double newValue, juce::NotificationType notification = juce::sendNotificationAsync) {
+	virtual void setValue(double newValue, juce::NotificationType notification = juce::sendNotificationAsync) {
 		newValue = constrainedValue(newValue);
 		if (newValue != lastCurrentValue) {
 			if (valueBox != nullptr) {
@@ -790,7 +790,7 @@ protected:
 		l->setKeyboardType(juce::TextInputTarget::decimalKeyboard);
 		l->setColour(juce::Label::textColourId, findColour(textBoxTextColourId));
 		l->setColour(juce::Label::backgroundColourId, findColour(textBoxBackgroundColourId));
-		l->setColour(juce::Label::outlineColourId, findColour(textBoxOutlineColourId));
+		l->setColour(juce::Label::outlineColourId, findColour(textBoxBackgroundColourId));//textBoxOutlineColourId));
 		l->setColour(juce::TextEditor::textColourId, findColour(textBoxTextColourId));
 		l->setColour(juce::TextEditor::backgroundColourId, findColour(textBoxBackgroundColourId));
 		l->setColour(juce::TextEditor::outlineColourId, findColour(textBoxOutlineColourId));
@@ -863,35 +863,6 @@ protected:
 				angle += juce::MathConstants<double>::twoPi;
 			}
 			angle = limitAngleForRotaryDrag(e, angle, rotaryParams.startAngleRadians, rotaryParams.endAngleRadians);
-			/*if (rotaryParams.stopAtEnd && e.mouseWasDraggedSinceMouseDown())
-			{
-				if (std::abs(angle - lastAngle) > juce::MathConstants<double>::pi)
-				{
-					if (angle >= lastAngle)
-						angle -= juce::MathConstants<double>::twoPi;
-					else
-						angle += juce::MathConstants<double>::twoPi;
-				}
-
-				if (angle >= lastAngle)
-					angle = juce::jmin(angle, (double)juce::jmax(rotaryParams.startAngleRadians, rotaryParams.endAngleRadians));
-				else
-					angle = juce::jmax(angle, (double)juce::jmin(rotaryParams.startAngleRadians, rotaryParams.endAngleRadians));
-			}
-			else
-			{
-				while (angle < rotaryParams.startAngleRadians)
-					angle += juce::MathConstants<double>::twoPi;
-
-				if (angle > rotaryParams.endAngleRadians)
-				{
-					if (smallestAngleBetween(angle, rotaryParams.startAngleRadians)
-						<= smallestAngleBetween(angle, rotaryParams.endAngleRadians))
-						angle = rotaryParams.startAngleRadians;
-					else
-						angle = rotaryParams.endAngleRadians;
-				}
-			}*/
 
 			auto proportion = (angle - rotaryParams.startAngleRadians) / (rotaryParams.endAngleRadians - rotaryParams.startAngleRadians);
 			valueWhenLastDragged = proportionOfLengthToValue(juce::jlimit(0.0, 1.0, proportion));
@@ -942,6 +913,8 @@ public:
 	PanRotarySlider();
 	~PanRotarySlider() override;
 	void sliderValueChanged(RotarySlider*) override;
+
+	void setValue(double newValue, juce::NotificationType notification) override;
 
 protected:
 	void drawRotarySlider(juce::Graphics& g, float sliderPos) override;

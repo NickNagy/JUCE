@@ -2127,7 +2127,6 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\MyJUCEFiles\AudioProcessorValueTreeStateExtended.h" />
     <ClInclude Include="..\..\..\MyJUCEFiles\RotarySliders.h" />
     <ClInclude Include="..\..\Source\PluginProcessor.h" />
     <ClInclude Include="..\..\Source\PluginEditor.h" />

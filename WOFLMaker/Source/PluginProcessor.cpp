@@ -22,8 +22,10 @@ WoflmakerAudioProcessor::WoflmakerAudioProcessor()
      ), tree(*this, nullptr)//, "PARAMETERS", {})
 #endif
 {
-    panLFO.initialise([](float x) { return std::sin(x); }, 128);
-    panLFO.setFrequency(3.0f);
+    using Parameter = juce::AudioProcessorValueTreeState::Parameter;
+
+    panWidthLFO.initialise([](float x) { return std::sin(x); }, 128);
+    panWidthLFO.setFrequency(0.0f);
 }
 
 WoflmakerAudioProcessor::~WoflmakerAudioProcessor()
@@ -136,6 +138,7 @@ void WoflmakerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
+    auto numSamples = buffer.getNumSamples();
 
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
@@ -144,10 +147,43 @@ void WoflmakerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
+        buffer.clear (i, 0, numSamples);
 
-    juce::dsp::AudioBlock<float> block(buffer);
+    float gainL, gainR;
+    panCenterParameter = tree.getRawParameterValue("center");
+    panRateParameter = tree.getRawParameterValue("panRate");
+    panWidthParameter = tree.getRawParameterValue("width");
 
+    // channel gains
+    if (panCenterParameter != nullptr) {
+        auto p = juce::MathConstants<float>::halfPi * 0.5 * ((*panCenterParameter / (float)PAN_MAX_MAGNITUDE)+ 1.0);
+        gainL = std::cos(p);
+        gainR = std::sin(p);
+    }
+    else {
+        gainL = previousGainL;
+        gainR = previousGainR;
+    }
+
+    // left channel
+    if (gainL == previousGainL) {
+        buffer.applyGain(0, 0, numSamples, gainL);
+    }
+    else {
+        buffer.applyGainRamp(0, 0, numSamples, previousGainL, gainL);
+        previousGainL = gainL;
+    }
+
+    // gainR
+    if (totalNumInputChannels > 1) {
+        if (gainR == previousGainR) {
+            buffer.applyGain(1, 0, numSamples, gainR);
+        }
+        else {
+            buffer.applyGainRamp(1, 0, numSamples, previousGainR, gainR);
+            previousGainR = gainR;
+        }
+    }
 }
 
 //==============================================================================
