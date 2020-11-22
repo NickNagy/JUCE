@@ -25,13 +25,17 @@ void PanRotarySlider::setValue(double newValue, juce::NotificationType notificat
 			lastCurrentValue = newValue;
 			if (currentValue != newValue) {
 				auto halfWidth = (float)maxValue.getValue() - (float)currentValue.getValue();
-				currentValue = newValue;
-				maxValue = newValue + halfWidth;
-				minValue = newValue - halfWidth;
+				// if minValue and maxValue stay in bounds with newVal, update -- otherwise, do nothing
+				if (newValue + halfWidth <= (float)PAN_MAX_MAGNITUDE && newValue - halfWidth >= (float)-PAN_MAX_MAGNITUDE) {
+					currentValue = newValue;
+					maxValue = newValue + halfWidth;
+					minValue = newValue - halfWidth;
+					// any reason to call these if not updating values?
+					updateText();
+					repaint();
+					triggerChangeMessage(notification);
+				}
 			}
-			updateText();
-			repaint();
-			triggerChangeMessage(notification);
 		}
 	}
 }
@@ -90,14 +94,20 @@ void PanRotarySlider::sliderValueChanged(RotarySlider* slider) {
 	auto nextMaxValue = (float)currentValue.getValue() + halfWidth;
 	// check case where values may go out of bounds of slider's full range
 	if (nextMinValue < -PAN_MAX_MAGNITUDE) {
-		currentValue.setValue(-PAN_MAX_MAGNITUDE + halfWidth);
+		minValue.setValue((float)-PAN_MAX_MAGNITUDE);
+		maxValue.setValue((float)-PAN_MAX_MAGNITUDE + 2.0 * halfWidth);
+		setValue((float)-PAN_MAX_MAGNITUDE + halfWidth);
 	}
-	if (nextMaxValue > PAN_MAX_MAGNITUDE) {
-		currentValue.setValue(PAN_MAX_MAGNITUDE - halfWidth);
+	else if (nextMaxValue > PAN_MAX_MAGNITUDE) {
+		minValue.setValue((float)PAN_MAX_MAGNITUDE - 2.0 * halfWidth);
+		maxValue.setValue((float)PAN_MAX_MAGNITUDE);
+		setValue((float)PAN_MAX_MAGNITUDE - halfWidth);
 	}
-	minValue.setValue(nextMinValue);
-	maxValue.setValue(nextMaxValue);
-	repaint();
+	else { // don't need to update currentValue
+		minValue.setValue(nextMinValue);
+		maxValue.setValue(nextMaxValue);
+		repaint(); // other two cases don't need to call repaint -- gets called in setValue()
+	}
 }
 
 void PanRotarySlider::handleRotaryDrag(const juce::MouseEvent& e) {

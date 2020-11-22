@@ -19,9 +19,11 @@ WoflmakerAudioProcessor::WoflmakerAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-     ), tree(*this, nullptr)//, "PARAMETERS", {})
+     ), tree(*this, nullptr, "PARAMETERS", {}), panCenterParameter("center", "Pan Center", (float)-PAN_MAX_MAGNITUDE, (float)PAN_MAX_MAGNITUDE, 0.0f)
 #endif
 {
+    addParameter(&panCenterParameter);
+
     using Parameter = juce::AudioProcessorValueTreeState::Parameter;
 
     panWidthLFO.initialise([](float x) { return std::sin(x); }, 128);
@@ -150,20 +152,11 @@ void WoflmakerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
         buffer.clear (i, 0, numSamples);
 
     float gainL, gainR;
-    panCenterParameter = tree.getRawParameterValue("center");
-    panRateParameter = tree.getRawParameterValue("panRate");
-    panWidthParameter = tree.getRawParameterValue("width");
 
     // channel gains
-    if (panCenterParameter != nullptr) {
-        auto p = juce::MathConstants<float>::halfPi * 0.5 * ((*panCenterParameter / (float)PAN_MAX_MAGNITUDE)+ 1.0);
-        gainL = std::cos(p);
-        gainR = std::sin(p);
-    }
-    else {
-        gainL = previousGainL;
-        gainR = previousGainR;
-    }
+    auto p = juce::MathConstants<float>::halfPi * 0.5 * ((panCenterParameter.get() / (float)PAN_MAX_MAGNITUDE)+ 1.0);
+    gainL = std::cos(p);
+    gainR = std::sin(p);
 
     // left channel
     if (gainL == previousGainL) {
@@ -194,7 +187,7 @@ bool WoflmakerAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* WoflmakerAudioProcessor::createEditor()
 {
-    return new WoflmakerAudioProcessorEditor (*this, tree);
+    return new WoflmakerAudioProcessorEditor (*this, tree, panCenterParameter);
 }
 
 //==============================================================================

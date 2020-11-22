@@ -62,7 +62,7 @@ private:
     size_t lfoUpdateCounter = lfoUpdateRate;
     juce::dsp::Oscillator<float> panCenterLFO, panWidthLFO; //lpfLFO, hpfLFO;
 
-    std::atomic<float>* panCenterParameter, *panRateParameter, *panWidthParameter;
+    juce::AudioParameterFloat panCenterParameter;
 
     float previousGainL = 1.0;
     float previousGainR = 1.0;

@@ -10,9 +10,8 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-WoflmakerAudioProcessorEditor::WoflmakerAudioProcessorEditor (WoflmakerAudioProcessor& p, juce::AudioProcessorValueTreeState& params)
-    : AudioProcessorEditor (&p), audioProcessor (p), panCenterValue(new juce::AudioParameterFloat("center", "Pan Center Angle", (float)-PAN_MAX_MAGNITUDE, (float)PAN_MAX_MAGNITUDE, 0.0f)),
-    panCenterSliderAttachment(*panCenterValue, nullptr, nullptr)
+WoflmakerAudioProcessorEditor::WoflmakerAudioProcessorEditor (WoflmakerAudioProcessor& p, juce::AudioProcessorValueTreeState& params, juce::AudioParameterFloat& panCenterParameter)
+    : AudioProcessorEditor (&p), audioProcessor (p), panCenterSliderAttachment(panCenterParameter, panCenterSlider, nullptr)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -37,8 +36,6 @@ WoflmakerAudioProcessorEditor::WoflmakerAudioProcessorEditor (WoflmakerAudioProc
 
     // LFO BPM Label
     addAndMakeVisible(bpmLabel);
-
-    p.addParameter(panCenterValue);
 }
 
 WoflmakerAudioProcessorEditor::~WoflmakerAudioProcessorEditor()

@@ -2478,6 +2478,9 @@
     <ClCompile Include="..\..\..\MyJUCEFiles\RotarySliders.cpp">
       <Filter>WOFLMaker\Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\MyJUCEFiles\Attachments.cpp">
+      <Filter>WOFLMaker\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\PluginProcessor.h">
@@ -4824,6 +4827,9 @@
       <Filter>JUCE Library Code</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\MyJUCEFiles\RotarySliders.h">
+      <Filter>WOFLMaker\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MyJUCEFiles\Attachments.h">
       <Filter>WOFLMaker\Source</Filter>
     </ClInclude>
   </ItemGroup>
