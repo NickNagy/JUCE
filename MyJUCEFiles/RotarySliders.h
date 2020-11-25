@@ -127,8 +127,8 @@ public:
 
 		@see setTextBoxStyle, getValueFromText, getTextFromValue
 	*/
-	void setTextBoxIsEditable(bool shouldBeEditable) { 
-		editableText = shouldBeEditable; 
+	void setTextBoxIsEditable(bool shouldBeEditable) {
+		editableText = shouldBeEditable;
 		updateTextBoxEnablement();
 	};
 
@@ -166,20 +166,20 @@ public:
 	}
 
 	//==============================================================================
-    /** Changes the slider's current value.
+	/** Changes the slider's current value.
 
-        This will trigger a callback to Slider::Listener::sliderValueChanged() for any listeners
-        that are registered, and will synchronously call the valueChanged() method in case subclasses
-        want to handle it.
+		This will trigger a callback to Slider::Listener::sliderValueChanged() for any listeners
+		that are registered, and will synchronously call the valueChanged() method in case subclasses
+		want to handle it.
 
-        @param newValue         the new value to set - this will be restricted by the
-                                minimum and maximum range, and will be snapped to the
-                                nearest interval if one has been set
-        @param notification     can be one of the NotificationType values, to request
-                                a synchronous or asynchronous call to the valueChanged() method
-                                of any Slider::Listeners that are registered. A notification will
-                                only be sent if the Slider's value has changed.
-    */
+		@param newValue         the new value to set - this will be restricted by the
+								minimum and maximum range, and will be snapped to the
+								nearest interval if one has been set
+		@param notification     can be one of the NotificationType values, to request
+								a synchronous or asynchronous call to the valueChanged() method
+								of any Slider::Listeners that are registered. A notification will
+								only be sent if the Slider's value has changed.
+	*/
 	virtual void setValue(double newValue, juce::NotificationType notification = juce::sendNotificationAsync) {
 		newValue = constrainedValue(newValue);
 		if (newValue != lastCurrentValue) {
@@ -195,7 +195,7 @@ public:
 		}
 	}
 
-    /** Returns the slider's current value. */
+	/** Returns the slider's current value. */
 	double getValue() const { return currentValue.getValue(); }
 
 	double snapValue(double attemptedValue, DragMode) {
@@ -244,7 +244,7 @@ public:
 	}
 
 	/** Returns the slider's range. */
-	juce::Range<double> getRange() const noexcept { return {normRange.start, normRange.end}; }
+	juce::Range<double> getRange() const noexcept { return { normRange.start, normRange.end }; }
 
 	/** Returns the current maximum value.
 		@see setRange, getRange
@@ -254,7 +254,7 @@ public:
 	/** Returns the current minimum value.
 		@see setRange, getRange
 	*/
-	double getMinimum() const noexcept { return normRange.start;}
+	double getMinimum() const noexcept { return normRange.start; }
 
 	/** Returns the current step-size for values.
 		@see setRange, getRange
@@ -493,7 +493,7 @@ public:
 				mousePos = ms.getLastMouseDownPosition();
 
 				auto delta = (float)(pixelsForFullDragExtent * (valueToProportionOfLength(valueOnMouseDown)
-						- valueToProportionOfLength(pos)));
+					- valueToProportionOfLength(pos)));
 
 				mousePos += juce::Point<float>(delta / -2.0f, delta / 2.0f);
 				mousePos = getScreenBounds().reduced(4).toFloat().getConstrainedPoint(mousePos);
@@ -519,7 +519,7 @@ public:
 	void paint(juce::Graphics& g) override {
 		auto sliderPos = (float)valueToProportionOfLength(lastCurrentValue);
 		jassert(sliderPos >= 0 && sliderPos <= 1.0f);
-		
+
 		// TODO: can't use drawRotarySlider from lookAndFeel because it expects a slider object
 		drawRotarySlider(g, sliderPos);
 	}
@@ -557,7 +557,7 @@ public:
 	void mouseUp(const juce::MouseEvent&) override {
 		if (isEnabled() && useDragEvents && (normRange.end > normRange.start)) {
 			restoreMouseIfHidden();
-			
+
 			//if (sendChangeOnlyOnRelease && valueOnMouseDown != static_cast<double> (currentValue.getValue())) {
 			//	triggerChangeMessage(juce::sendNotificationAsync);
 			//}
@@ -571,9 +571,9 @@ public:
 			DragMode dragMode = notDragging;
 			handleRotaryDrag(e);
 			valueWhenLastDragged = juce::jlimit(normRange.start, normRange.end, valueWhenLastDragged);
-			
+
 			setValue(snapValue(valueWhenLastDragged, dragMode), juce::sendNotification);
-			
+
 			mousePosWhenLastDragged = e.position;
 		}
 	}
@@ -620,7 +620,7 @@ public:
 					if (valueBox != nullptr)
 						valueBox->hideEditor(false);
 					auto value = static_cast<double>(currentValue.getValue());
-					auto delta = getMouseWheelData(value, (std::abs(wheel.deltaX) > std::abs(wheel.deltaY) ? -wheel.deltaX : wheel.deltaY) * (wheel.isReversed? -1.0f : 1.0f));
+					auto delta = getMouseWheelData(value, (std::abs(wheel.deltaX) > std::abs(wheel.deltaY) ? -wheel.deltaX : wheel.deltaY) * (wheel.isReversed ? -1.0f : 1.0f));
 					if (delta != 0.0) {
 						auto newValue = value + juce::jmax(normRange.interval, std::abs(delta)) * (delta < 0 ? -1.0 : 1.0);
 						DragInProgress drag(*this);
@@ -634,7 +634,7 @@ public:
 	}
 	/** @internal */
 	void modifierKeysChanged(const juce::ModifierKeys&) override {} // TODO
-	
+
 	/** @internal */
 	void lookAndFeelChanged() override {
 		if (textBoxPos != NoTextBox) {
@@ -658,7 +658,7 @@ public:
 		resized();
 		repaint();
 	}
-	
+
 	/** @internal */
 	void enablementChanged() override {
 		repaint();
@@ -671,7 +671,7 @@ public:
 	void colourChanged() override {
 		lookAndFeelChanged();
 	}
-	
+
 	/** @internal */
 	void mouseMove(const juce::MouseEvent& e) override {}
 	/** @internal */
@@ -733,7 +733,7 @@ protected:
 
 	void updateRange() {
 		numDecimalPlaces = 7;
-		if (normRange.interval != 0.0) { 
+		if (normRange.interval != 0.0) {
 			int v = std::abs(juce::roundToInt(normRange.interval * 10000000));
 			while ((v % 10) == 0 && numDecimalPlaces > 0)
 			{
@@ -754,7 +754,7 @@ protected:
 	void getSliderLayout() {
 		int minXSpace = 0;
 		int minYSpace = 0;
-		
+
 		if (textBoxPos == TextBoxLeft || textBoxPos == TextBoxRight)
 			minXSpace = 30;
 		else
@@ -923,7 +923,7 @@ private:
 	// these are used if the slider range is being controlled by a second rotary slider
 	bool hasExternalWidthController = false;
 	juce::Value minValue, maxValue;
-	
+
 	int thumbMinLegalValue = -PAN_MAX_MAGNITUDE;
 	int thumbMaxLegalValue = PAN_MAX_MAGNITUDE;
 };

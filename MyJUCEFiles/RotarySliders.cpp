@@ -4,7 +4,7 @@
 
 //=========================== PAN ROTARY SLIDER ===========================================
 PanRotarySlider::PanRotarySlider() {
-	setRange(-PAN_MAX_MAGNITUDE, PAN_MAX_MAGNITUDE, 1);
+	setRange(-PAN_MAX_MAGNITUDE, PAN_MAX_MAGNITUDE, 1.f);
 	currentValue.setValue(0);
 	minValue.setValue(0);
 	maxValue.setValue(0);
@@ -24,7 +24,7 @@ void PanRotarySlider::setValue(double newValue, juce::NotificationType notificat
 			valueBox->hideEditor(true);
 			lastCurrentValue = newValue;
 			if (currentValue != newValue) {
-				auto halfWidth = 0.5f * ((float)maxValue.getValue() - (float)minValue.getValue());				
+				auto halfWidth = 0.5f * ((float)maxValue.getValue() - (float)minValue.getValue());
 				// if minValue and maxValue stay in bounds with newVal, update -- otherwise, do nothing
 				if (newValue + halfWidth <= (float)PAN_MAX_MAGNITUDE && newValue - halfWidth >= (float)-PAN_MAX_MAGNITUDE) {
 					currentValue = newValue;
@@ -40,7 +40,7 @@ void PanRotarySlider::setValue(double newValue, juce::NotificationType notificat
 	}
 }
 
-void PanRotarySlider::drawRotarySlider(juce::Graphics&g, float sliderPos) {
+void PanRotarySlider::drawRotarySlider(juce::Graphics& g, float sliderPos) {
 	auto width = sliderRect.getWidth();
 	auto height = sliderRect.getHeight();
 	auto x = sliderRect.getX();
@@ -89,7 +89,7 @@ void PanRotarySlider::sliderValueChanged(RotarySlider* slider) {
 	jassert(slider->getValue() <= 2 * PAN_MAX_MAGNITUDE);
 	// for the moment, I am ignoring the case where more than one external slider tries to control a single pan slider
 	hasExternalWidthController = true;
-	auto halfWidth = 0.5*slider->getValue();
+	auto halfWidth = 0.5 * slider->getValue();
 	auto nextMinValue = (float)currentValue.getValue() - halfWidth;
 	auto nextMaxValue = (float)currentValue.getValue() + halfWidth;
 	// check case where values may go out of bounds of slider's full range
@@ -123,7 +123,7 @@ void PanRotarySlider::handleRotaryDrag(const juce::MouseEvent& e) {
 		float maxLegalAngle = rotaryParams.endAngleRadians;
 		float angleRangeRadians = rotaryParams.endAngleRadians - rotaryParams.startAngleRadians;
 
-		if(hasExternalWidthController && (maxValue.getValue() != minValue.getValue())) {
+		if (hasExternalWidthController && (maxValue.getValue() != minValue.getValue())) {
 			auto halfWidth = (float)maxValue.getValue() - (float)currentValue.getValue();
 			//auto halfWidthAngle = rotaryParams.startAngleRadians + angleRangeRadians * valueToProportionOfLength(halfWidth);
 			minLegalAngle = rotaryParams.startAngleRadians + angleRangeRadians * valueToProportionOfLength((float)-PAN_MAX_MAGNITUDE + halfWidth);
@@ -131,7 +131,7 @@ void PanRotarySlider::handleRotaryDrag(const juce::MouseEvent& e) {
 		}
 
 		angle = limitAngleForRotaryDrag(e, angle, minLegalAngle, maxLegalAngle);
-		
+
 		auto proportion = (angle - rotaryParams.startAngleRadians) / angleRangeRadians;
 		valueWhenLastDragged = proportionOfLengthToValue(juce::jlimit(0.0, 1.0, proportion));
 		lastAngle = angle;
