@@ -130,6 +130,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\MyJUCEFiles\Attachments.cpp" />
+    <ClCompile Include="..\..\..\MyJUCEFiles\ComponentBox.cpp" />
     <ClCompile Include="..\..\..\MyJUCEFiles\RotarySliders.cpp" />
     <ClCompile Include="..\..\Source\PluginProcessor.cpp" />
     <ClCompile Include="..\..\Source\PluginEditor.cpp" />
@@ -2129,6 +2130,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\MyJUCEFiles\Attachments.h" />
+    <ClInclude Include="..\..\..\MyJUCEFiles\ComponentBox.h" />
     <ClInclude Include="..\..\..\MyJUCEFiles\RotarySliders.h" />
     <ClInclude Include="..\..\Source\PluginProcessor.h" />
     <ClInclude Include="..\..\Source\PluginEditor.h" />

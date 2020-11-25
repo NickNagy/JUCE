@@ -10,32 +10,31 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-WoflmakerAudioProcessorEditor::WoflmakerAudioProcessorEditor (WoflmakerAudioProcessor& p, juce::AudioProcessorValueTreeState& params, juce::AudioParameterFloat * panCenterParameter)
-    : AudioProcessorEditor (&p), audioProcessor (p), panCenterSliderAttachment(*panCenterParameter, panCenterSlider, nullptr)
+WoflmakerAudioProcessorEditor::WoflmakerAudioProcessorEditor (WoflmakerAudioProcessor& p, juce::AudioProcessorValueTreeState& params, juce::AudioParameterInt * panCenterParameter, juce::AudioParameterInt * panWidthParameter,
+    juce::AudioParameterFloat * panCenterLFOParameter, juce::AudioParameterFloat * panWidthLFOParameter)
+    : AudioProcessorEditor (&p), audioProcessor (p), panCenterSliderAttachment(*panCenterParameter, panCenterSlider, nullptr), panWidthSliderAttachment(*panWidthParameter, panWidthSlider, nullptr),
+    panCenterLFOSliderAttachment(*panCenterLFOParameter, panCenterLFOSlider, nullptr), panWidthLFOSliderAttachment(*panWidthLFOParameter, panWidthLFOSlider, nullptr)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (200, 600);
 
-    // pan width
-    panWidthSlider;//.setSliderStyle(juce::Slider::LinearHorizontal);
-    panWidthSlider.setRange(0, 2*PAN_MAX_MAGNITUDE, 2);
+    // Pan Width slider
+    panWidthSlider.setRange(0, (int)PAN_MAX_MAGNITUDE*2, 2);
     panWidthSlider.addListener(&panCenterSlider);
     addAndMakeVisible(panWidthSlider);
 
-    //pan center
+    // Pan Center slider
     addAndMakeVisible(panCenterSlider);
 
-    // pan LFO
-    panLFOSlider.setSliderStyle(juce::Slider::Rotary);
-    panLFOSlider.setRange(0, 60, 0.1f);
-    panLFOSlider.setTextValueSuffix("Hz");
-    panLFOSlider.addListener(&bpmLabel);
-    panLFOSliderListener.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(params, "panRate", panLFOSlider));
-    addAndMakeVisible(panLFOSlider);
+    // Pan Width LFO slider
+    panWidthLFOSlider.setRange(0, (float)MAX_LFO_FREQUENCY_HZ, 0.1f);
+    panWidthLFOSlider.setTextValueSuffix("Hz");
 
-    // LFO BPM Label
-    addAndMakeVisible(bpmLabel);
+    // Pan Center LFO slider
+    panCenterLFOSlider.setRange(0, (float)MAX_LFO_FREQUENCY_HZ, 0.1f);
+    panCenterLFOSlider.setTextValueSuffix("Hz");
+    addAndMakeVisible(panCenterLFOSlider);
 }
 
 WoflmakerAudioProcessorEditor::~WoflmakerAudioProcessorEditor()
@@ -57,9 +56,6 @@ void WoflmakerAudioProcessorEditor::resized()
     int textBoxHeight = 20;
     int textBoxWidth = 50;
 
-    // todo
-    bpmLabel.setBounds(0.5f * (width - textBoxWidth), height - textBoxHeight, textBoxWidth, textBoxHeight);
-
     auto rSliderRowHeight = 0.33f * height; // 2 rows
 
     // for choosing radius of slider
@@ -72,11 +68,11 @@ void WoflmakerAudioProcessorEditor::resized()
     int bottomSliderY = 0.84f*height - radius;
 
     panWidthSlider.setBounds(sliderX, topSliderY, 2 * radius, 2 * radius);
-    panWidthSlider.setTextBoxStyle(RotarySlider::TextBoxBelow, true, textBoxWidth, textBoxHeight);
+    panWidthSlider.setTextBoxStyle(magna::RotarySlider::TextBoxBelow, true, textBoxWidth, textBoxHeight);
 
     panCenterSlider.setBounds(sliderX, midSliderY, 2 * radius, 2 * radius);
-    panCenterSlider.setTextBoxStyle(RotarySlider::TextBoxBelow, true, textBoxWidth, textBoxHeight);
+    panCenterSlider.setTextBoxStyle(magna::RotarySlider::TextBoxBelow, true, textBoxWidth, textBoxHeight);
 
-    panLFOSlider.setBounds(sliderX, bottomSliderY, 2 * radius, 2 * radius);
-    panLFOSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, textBoxWidth, textBoxHeight);
+    panCenterLFOSlider.setBounds(sliderX, bottomSliderY, 2 * radius, 2 * radius);
+    panCenterLFOSlider.setTextBoxStyle(magna::RotarySlider::TextBoxBelow, true, textBoxWidth, textBoxHeight);
 }

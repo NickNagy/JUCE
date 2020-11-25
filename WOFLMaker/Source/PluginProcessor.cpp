@@ -22,12 +22,10 @@ WoflmakerAudioProcessor::WoflmakerAudioProcessor()
 	), tree(*this, nullptr, "PARAMETERS", {})
 #endif
 {
-	addParameter(panCenterParameter = new juce::AudioParameterFloat("center", "Pan Center", (float)-PAN_MAX_MAGNITUDE, (float)PAN_MAX_MAGNITUDE, 0.0f));
-
-	using Parameter = juce::AudioProcessorValueTreeState::Parameter;
-
-	panWidthLFO.initialise([](float x) { return std::sin(x); }, 128);
-	panWidthLFO.setFrequency(0.0f);
+	addParameter(panCenterParameter = new juce::AudioParameterInt("center", "Pan Center", (int)-PAN_MAX_MAGNITUDE, (int)PAN_MAX_MAGNITUDE, 0));
+	addParameter(panWidthParameter = new juce::AudioParameterInt("width", "Pan Width", 0, (int)PAN_MAX_MAGNITUDE * 2, 0));
+	addParameter(panCenterLFOParameter = new juce::AudioParameterFloat("centerLFO", "Pan Center LFO Rate", 0.0f, (float)MAX_LFO_FREQUENCY_HZ, 0.0f));
+	addParameter(panWidthLFOParameter = new juce::AudioParameterFloat("widthLFO", "Pan Width LFO Rate", 0.0f, (float)MAX_LFO_FREQUENCY_HZ, 0.0f));
 }
 
 WoflmakerAudioProcessor::~WoflmakerAudioProcessor()
@@ -100,9 +98,7 @@ void WoflmakerAudioProcessor::changeProgramName(int index, const juce::String& n
 void WoflmakerAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
 	// Use this method as the place to do any pre-playback
-	// initialisation that you need..
-	//tempBlock = juce::dsp::AudioBlock<float>(heapBlock, getTotalNumInputChannels(), samplesPerBlock);
-	//panLFO.prepare({ sampleRate / lfoUpdateRate, samplesPerBlock, getTotalNumInputChannels() });
+	// initialisation that you need...
 }
 
 void WoflmakerAudioProcessor::releaseResources()
@@ -187,7 +183,7 @@ bool WoflmakerAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* WoflmakerAudioProcessor::createEditor()
 {
-	return new WoflmakerAudioProcessorEditor(*this, tree, panCenterParameter);
+	return new WoflmakerAudioProcessorEditor(*this, tree, panCenterParameter, panWidthParameter, panCenterLFOParameter, panWidthLFOParameter);
 }
 
 //==============================================================================

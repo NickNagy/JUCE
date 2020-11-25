@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    This file contains the basic framework code for a JUCE plugin editor.
+	This file contains the basic framework code for a JUCE plugin editor.
 
   ==============================================================================
 */
@@ -15,45 +15,47 @@
 
 class LFOSliderListenerLabel : public juce::Slider::Listener, public juce::Label {
 public:
-    LFOSliderListenerLabel() {
-        setText("0", juce::NotificationType::dontSendNotification);
-    };
-    ~LFOSliderListenerLabel() override {};
+	LFOSliderListenerLabel() {
+		setText("0", juce::NotificationType::dontSendNotification);
+	};
+	~LFOSliderListenerLabel() override {};
 private:
-    void sliderValueChanged(juce::Slider* slider) override {
-        auto toBPM = slider->getValue() / 60.0f;
-        setText(JUCE_TO_STRING(toBPM), juce::NotificationType::dontSendNotification);
-    }
+	void sliderValueChanged(juce::Slider* slider) override {
+		auto toBPM = slider->getValue() / 60.0f;
+		setText(JUCE_TO_STRING(toBPM), juce::NotificationType::dontSendNotification);
+	}
 };
 
 //==============================================================================
 /**
 */
-class WoflmakerAudioProcessorEditor  : public juce::AudioProcessorEditor
+class WoflmakerAudioProcessorEditor : public juce::AudioProcessorEditor
 {
 public:
-    WoflmakerAudioProcessorEditor (WoflmakerAudioProcessor&, juce::AudioProcessorValueTreeState& params, juce::AudioParameterFloat * panCenterParameter);
-    ~WoflmakerAudioProcessorEditor() override;
+	WoflmakerAudioProcessorEditor(WoflmakerAudioProcessor&, juce::AudioProcessorValueTreeState& params, juce::AudioParameterInt* panCenterParameter, juce::AudioParameterInt* panWidthParameter, juce::AudioParameterFloat* panCenterLFOParameter, juce::AudioParameterFloat* panWidthLFOParameter);
+	~WoflmakerAudioProcessorEditor() override;
 
-    //==============================================================================
-    void paint (juce::Graphics&) override;
-    void resized() override;
+	//==============================================================================
+	void paint(juce::Graphics&) override;
+	void resized() override;
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
-    WoflmakerAudioProcessor& audioProcessor;
+	// This reference is provided as a quick way for your editor to
+	// access the processor object that created it.
+	WoflmakerAudioProcessor& audioProcessor;
 
-    juce::Slider panLFOSlider;
-    RotarySlider panWidthSlider; 
-    PanRotarySlider panCenterSlider;
+	// Sliders
+	magna::RotarySlider panWidthSlider, panCenterLFOSlider, panWidthLFOSlider;
+	magna::PanRotarySlider panCenterSlider;
 
-    juce::ToggleButton panWidthLFOToggle, panLFOToggle;
-    LFOSliderListenerLabel bpmLabel;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> panLFOSliderListener;
-    std::unique_ptr<juce::ParameterAttachment> panWidthSliderListener, panCenterSliderListener;
+	// Toggle Buttons
+	juce::ToggleButton panWidthLFOToggle, panLFOToggle;
 
-    RotarySliderParameterAttachment panCenterSliderAttachment;
+	// Attachments
+	magna::RotarySliderParameterAttachment panCenterSliderAttachment, panWidthSliderAttachment, panCenterLFOSliderAttachment, panWidthLFOSliderAttachment;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WoflmakerAudioProcessorEditor)
+	// Labels
+	LFOSliderListenerLabel bpmLabel;
+
+	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WoflmakerAudioProcessorEditor)
 };

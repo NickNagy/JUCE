@@ -2481,6 +2481,9 @@
     <ClCompile Include="..\..\..\MyJUCEFiles\Attachments.cpp">
       <Filter>WOFLMaker\Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\MyJUCEFiles\ComponentBox.cpp">
+      <Filter>WOFLMaker\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\PluginProcessor.h">
@@ -4830,6 +4833,9 @@
       <Filter>WOFLMaker\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\MyJUCEFiles\Attachments.h">
+      <Filter>WOFLMaker\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MyJUCEFiles\ComponentBox.h">
       <Filter>WOFLMaker\Source</Filter>
     </ClInclude>
   </ItemGroup>
