@@ -62,13 +62,13 @@ private:
     size_t lfoUpdateCounter = lfoUpdateRate;
     juce::dsp::Oscillator<float> panCenterLFO, panWidthLFO; //lpfLFO, hpfLFO;
 
-    juce::AudioParameterFloat panCenterParameter;
+    juce::AudioParameterFloat * panCenterParameter;//, panWidthParameter, panLFORateParameter;
 
     float previousGainL = 1.0;
     float previousGainR = 1.0;
     double oneOverPanMagnitude = (double)PAN_MAX_MAGNITUDE / 1.0;
 
-    juce::HeapBlock<char> heapBlock;
+    //juce::HeapBlock<char> heapBlock;
     juce::dsp::AudioBlock<float> tempBlock;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WoflmakerAudioProcessor)

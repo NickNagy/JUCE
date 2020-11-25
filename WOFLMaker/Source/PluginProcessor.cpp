@@ -19,10 +19,10 @@ WoflmakerAudioProcessor::WoflmakerAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-     ), tree(*this, nullptr, "PARAMETERS", {}), panCenterParameter("center", "Pan Center", (float)-PAN_MAX_MAGNITUDE, (float)PAN_MAX_MAGNITUDE, 0.0f)
+     ), tree(*this, nullptr, "PARAMETERS", {})
 #endif
 {
-    addParameter(&panCenterParameter);
+    addParameter(panCenterParameter = new juce::AudioParameterFloat("center", "Pan Center", (float)-PAN_MAX_MAGNITUDE, (float)PAN_MAX_MAGNITUDE, 0.0f));
 
     using Parameter = juce::AudioProcessorValueTreeState::Parameter;
 
@@ -101,7 +101,7 @@ void WoflmakerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-    tempBlock = juce::dsp::AudioBlock<float>(heapBlock, getTotalNumInputChannels(), samplesPerBlock);
+    //tempBlock = juce::dsp::AudioBlock<float>(heapBlock, getTotalNumInputChannels(), samplesPerBlock);
     //panLFO.prepare({ sampleRate / lfoUpdateRate, samplesPerBlock, getTotalNumInputChannels() });
 }
 
@@ -154,7 +154,7 @@ void WoflmakerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     float gainL, gainR;
 
     // channel gains
-    auto p = juce::MathConstants<float>::halfPi * 0.5 * ((panCenterParameter.get() / (float)PAN_MAX_MAGNITUDE)+ 1.0);
+    auto p = juce::MathConstants<float>::halfPi * 0.5 * ((panCenterParameter->get() / (float)PAN_MAX_MAGNITUDE)+ 1.0);
     gainL = std::cos(p);
     gainR = std::sin(p);
 

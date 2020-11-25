@@ -24,7 +24,7 @@ void PanRotarySlider::setValue(double newValue, juce::NotificationType notificat
 			valueBox->hideEditor(true);
 			lastCurrentValue = newValue;
 			if (currentValue != newValue) {
-				auto halfWidth = (float)maxValue.getValue() - (float)currentValue.getValue();
+				auto halfWidth = 0.5f * ((float)maxValue.getValue() - (float)minValue.getValue());				
 				// if minValue and maxValue stay in bounds with newVal, update -- otherwise, do nothing
 				if (newValue + halfWidth <= (float)PAN_MAX_MAGNITUDE && newValue - halfWidth >= (float)-PAN_MAX_MAGNITUDE) {
 					currentValue = newValue;
@@ -121,16 +121,18 @@ void PanRotarySlider::handleRotaryDrag(const juce::MouseEvent& e) {
 
 		float minLegalAngle = rotaryParams.startAngleRadians;
 		float maxLegalAngle = rotaryParams.endAngleRadians;
+		float angleRangeRadians = rotaryParams.endAngleRadians - rotaryParams.startAngleRadians;
 
 		if(hasExternalWidthController && (maxValue.getValue() != minValue.getValue())) {
-			auto halfWidthAngle = ((double)maxValue.getValue() - (double)currentValue.getValue()) / (rotaryParams.endAngleRadians - rotaryParams.startAngleRadians);
-			minLegalAngle = rotaryParams.startAngleRadians + halfWidthAngle; //valueToProportionOfLength(-PAN_MAX_MAGNITUDE + halfWidth);
-			maxLegalAngle = rotaryParams.endAngleRadians - halfWidthAngle;//valueToProportionOfLength(PAN_MAX_MAGNITUDE - halfWidth);
+			auto halfWidth = (float)maxValue.getValue() - (float)currentValue.getValue();
+			//auto halfWidthAngle = rotaryParams.startAngleRadians + angleRangeRadians * valueToProportionOfLength(halfWidth);
+			minLegalAngle = rotaryParams.startAngleRadians + angleRangeRadians * valueToProportionOfLength((float)-PAN_MAX_MAGNITUDE + halfWidth);
+			maxLegalAngle = rotaryParams.startAngleRadians + angleRangeRadians * valueToProportionOfLength((float)PAN_MAX_MAGNITUDE - halfWidth);
 		}
 
 		angle = limitAngleForRotaryDrag(e, angle, minLegalAngle, maxLegalAngle);
 		
-		auto proportion = (angle - rotaryParams.startAngleRadians) / (rotaryParams.endAngleRadians - rotaryParams.startAngleRadians);
+		auto proportion = (angle - rotaryParams.startAngleRadians) / angleRangeRadians;
 		valueWhenLastDragged = proportionOfLengthToValue(juce::jlimit(0.0, 1.0, proportion));
 		lastAngle = angle;
 	}

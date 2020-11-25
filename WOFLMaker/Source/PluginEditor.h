@@ -32,7 +32,7 @@ private:
 class WoflmakerAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 public:
-    WoflmakerAudioProcessorEditor (WoflmakerAudioProcessor&, juce::AudioProcessorValueTreeState& params, juce::AudioParameterFloat& panCenterParameter);
+    WoflmakerAudioProcessorEditor (WoflmakerAudioProcessor&, juce::AudioProcessorValueTreeState& params, juce::AudioParameterFloat * panCenterParameter);
     ~WoflmakerAudioProcessorEditor() override;
 
     //==============================================================================

@@ -10,8 +10,8 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-WoflmakerAudioProcessorEditor::WoflmakerAudioProcessorEditor (WoflmakerAudioProcessor& p, juce::AudioProcessorValueTreeState& params, juce::AudioParameterFloat& panCenterParameter)
-    : AudioProcessorEditor (&p), audioProcessor (p), panCenterSliderAttachment(panCenterParameter, panCenterSlider, nullptr)
+WoflmakerAudioProcessorEditor::WoflmakerAudioProcessorEditor (WoflmakerAudioProcessor& p, juce::AudioProcessorValueTreeState& params, juce::AudioParameterFloat * panCenterParameter)
+    : AudioProcessorEditor (&p), audioProcessor (p), panCenterSliderAttachment(*panCenterParameter, panCenterSlider, nullptr)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
