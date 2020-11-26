@@ -26,6 +26,9 @@ WoflmakerAudioProcessor::WoflmakerAudioProcessor()
 	addParameter(panWidthParameter = new juce::AudioParameterInt("width", "Pan Width", 0, (int)PAN_MAX_MAGNITUDE * 2, 0));
 	addParameter(panCenterLFOParameter = new juce::AudioParameterFloat("centerLFO", "Pan Center LFO Rate", 0.0f, (float)MAX_LFO_FREQUENCY_HZ, 0.0f));
 	addParameter(panWidthLFOParameter = new juce::AudioParameterFloat("widthLFO", "Pan Width LFO Rate", 0.0f, (float)MAX_LFO_FREQUENCY_HZ, 0.0f));
+
+	panCenterLFO.initialise([](float x) { return std::sin(x); }, 128);
+	panCenterLFO.setFrequency(panCenterLFOParameter->get());
 }
 
 WoflmakerAudioProcessor::~WoflmakerAudioProcessor()
@@ -99,6 +102,10 @@ void WoflmakerAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlo
 {
 	// Use this method as the place to do any pre-playback
 	// initialisation that you need...
+
+	// may want set to getNumOutputChannels() instead
+	juce::dsp::ProcessSpec lfoSpec = { sampleRate / (double)lfoUpdateRate, (juce::uint32)samplesPerBlock, (juce::uint32)getTotalNumInputChannels() };
+	panCenterLFO.prepare(lfoSpec);
 }
 
 void WoflmakerAudioProcessor::releaseResources()
@@ -149,8 +156,18 @@ void WoflmakerAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juc
 
 	float gainL, gainR;
 
+	// update LFO frequency based on pan center LFO slider value
+	panCenterLFO.setFrequency(panCenterLFOParameter->get()); // force?
+
+	// LFO amplitude is 1 --> to re-map it to the amplitude requested by the GUI we simply multiply by the value of the width slider (attached to panWidthParameter)
+	auto panOscCurrentValue = panCenterLFO.processSample(0.0f) * panWidthParameter->get();
+	// then add the pan-center slider value to get the correct offset
+	panOscCurrentValue += panCenterParameter->get();
+	// and divide again to re-map to a {-1.0, 1.0} space
+	panOscCurrentValue /= (float)PAN_MAX_MAGNITUDE;
+
 	// channel gains
-	auto p = juce::MathConstants<float>::halfPi * 0.5 * ((panCenterParameter->get() / (float)PAN_MAX_MAGNITUDE) + 1.0);
+	auto p = juce::MathConstants<float>::halfPi * 0.5 * (panOscCurrentValue + 1.0);
 	gainL = std::cos(p);
 	gainR = std::sin(p);
 

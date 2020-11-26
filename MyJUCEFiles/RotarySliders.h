@@ -361,32 +361,6 @@ namespace magna {
 		};
 
 		//==============================================================================
-		/** This abstract base class is implemented by LookAndFeel classes to provide
-		slider drawing functionality.
-		*/
-		struct JUCE_API  LookAndFeelMethods
-		{
-			virtual ~LookAndFeelMethods() = default;
-
-			//==============================================================================
-			virtual int getSliderThumbRadius(RotarySlider&) = 0;
-
-			virtual void drawRotarySlider(juce::Graphics&,
-				int x, int y, int width, int height,
-				float sliderPosProportional,
-				float rotaryStartAngle,
-				float rotaryEndAngle,
-				RotarySlider&) = 0;
-
-			virtual juce::Button* createSliderButton(RotarySlider&, bool isIncrement) = 0;
-			virtual juce::Label* createRotarySliderTextBox(RotarySlider&) = 0;
-
-			virtual juce::ImageEffectFilter* getSliderEffect(RotarySlider&) = 0;
-
-			virtual RotarySliderLayout getSliderLayout(RotarySlider&) = 0;
-		};
-
-		//==============================================================================
 
 		void restoreMouseIfHidden();
 

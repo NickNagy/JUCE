@@ -379,7 +379,6 @@ namespace magna {
 
 	double RotarySlider::constrainedValue(double value) const { return normRange.snapToLegalValue(value); }
 
-	// TODO: move this to RotarySlider::LookAndFeelMethods::getSliderLayout()
 	void RotarySlider::getSliderLayout() {
 		int minXSpace = 0;
 		int minYSpace = 0;
@@ -412,7 +411,6 @@ namespace magna {
 		else if (textBoxPos == RotarySlider::TextBoxBelow) sliderBounds.removeFromBottom(textBoxHeight);
 	}
 
-	// TODO: move this to RotarySlider::LookAndFeelMethods::createRotarySliderTextBox()
 	juce::Label* RotarySlider::createRotarySliderTextBox() {
 		auto l = new juce::Label();
 		l->setJustificationType(juce::Justification::centred);
@@ -427,7 +425,6 @@ namespace magna {
 		return l;
 	}
 
-	// TODO: move this to RotarySlider::LookAndFeelMethods::drawRotarySlider()
 	void RotarySlider::drawRotarySlider(juce::Graphics& g, float sliderPos) {
 		auto width = sliderRect.getWidth();
 		auto height = sliderRect.getHeight();
