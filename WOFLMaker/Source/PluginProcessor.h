@@ -70,8 +70,11 @@ private:
 	size_t lfoUpdateCounter = lfoUpdateRate;
 
 	// Processor parameters
-	juce::AudioParameterInt* panCenterParameter, * panWidthParameter;
+	juce::AudioParameterInt* panCenterParameter, * panWidthParameter, * panCenterLFOFunctionMenuChoiceParameter;
 	juce::AudioParameterFloat* panCenterLFOParameter, * panWidthLFOParameter;
+	juce::AudioParameterBool* panCenterLFOToggleParameter;
+
+	void setLFOFunction(juce::dsp::Oscillator<float>& lfo, int function);
 
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WoflmakerAudioProcessor)
 };

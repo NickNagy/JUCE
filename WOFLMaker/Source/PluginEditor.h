@@ -55,13 +55,21 @@ struct SliderBoxLookAndFeel : public juce::LookAndFeel_V4 {
 	SliderBoxLookAndFeel();
 };
 
-#define SLIDERS_PER_COLUMN 3
-#define SLIDERS_PER_ROW 1
 /* Proportional height macros should sum up to approx. 1.0 */
 #define APP_TITLE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT 0.2f
-// height of space of all rows and columns of sliders
-#define SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT 0.6f
-#define LFO_WINDOW_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT 0.2f
+// height of slider box w.r.t app height
+#define SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT 0.3f
+/* other dimension macros */
+#define LFO_WINDOW_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT 0.2f
+#define SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT 0.33f
+#define TOGGLEBUTTON_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT 0.1f
+#define CONTROLBOX_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT 0.5f
+#define TOGGLEBUTTON_WIDTH_AS_PROPORTION_OF_CONTROLBOX_WIDTH 0.33f
+
+#define CONTROLBOX_SLIDERBOX_ROWS 1
+#define CONTROLBOX_SLIDERBOX_COLS 2
+
+#define NUM_LFO_FUNCTIONS 4
 
 //==============================================================================
 /**
@@ -69,7 +77,9 @@ struct SliderBoxLookAndFeel : public juce::LookAndFeel_V4 {
 class WoflmakerAudioProcessorEditor : public juce::AudioProcessorEditor
 {
 public:
-	WoflmakerAudioProcessorEditor(WoflmakerAudioProcessor&, juce::AudioProcessorValueTreeState& params, juce::AudioParameterInt* panCenterParameter, juce::AudioParameterInt* panWidthParameter, juce::AudioParameterFloat* panCenterLFOParameter, juce::AudioParameterFloat* panWidthLFOParameter);
+	WoflmakerAudioProcessorEditor(WoflmakerAudioProcessor&, juce::AudioProcessorValueTreeState& params, juce::AudioParameterInt* panCenterParameter, 
+		juce::AudioParameterInt* panWidthParameter, juce::AudioParameterFloat* panCenterLFOParameter, juce::AudioParameterFloat* panWidthLFOParameter, 
+		juce::AudioParameterBool* panCenterLFOToggleParameter, juce::AudioParameterInt* panCenterLFOFunctionParameter);
 	~WoflmakerAudioProcessorEditor() override;
 
 	//==============================================================================
@@ -77,6 +87,16 @@ public:
 	void resized() override;
 
 private:
+	// Control box struct
+	struct LFOControlBox : juce::Component {
+		magna::RotarySliderBox& widthSliderBox, &lfoSliderBox;
+		juce::ToggleButton& toggleButton;
+		juce::ComboBox& dropDownMenu;
+		LFOControlBox(magna::RotarySliderBox& widthSB, magna::RotarySliderBox& lfoSB, juce::ToggleButton& button, juce::ComboBox& menu) : widthSliderBox(widthSB), lfoSliderBox(lfoSB), toggleButton(button), dropDownMenu(menu) {}
+		void resized() override;
+	};
+	LFOControlBox controlBox;
+	
 	// This reference is provided as a quick way for your editor to
 	// access the processor object that created it.
 	WoflmakerAudioProcessor& audioProcessor;
@@ -88,15 +108,24 @@ private:
 	// Title for app
 	juce::Label appTitle;
 
+	// Toggle for LFO
+	juce::ToggleButton panCenterLFOToggleButton;
+
+	// Toggle attachment
+	juce::ButtonParameterAttachment panCenterLFOToggleButtonAttachment;
+
+	// Drop-down menu for LFO function selection
+	juce::ComboBox panCenterLFOFunctionMenu;
+
+	// Drop-down menu attachments
+	juce::ComboBoxParameterAttachment panCenterLFOFunctionMenuAttachment;
+
 	// Sliders
 	magna::RotarySlider panWidthSlider, panCenterLFOSlider, panWidthLFOSlider;
 	magna::PanRotarySlider panCenterSlider;
 
 	// Slider attachments
 	magna::RotarySliderParameterAttachment panCenterSliderAttachment, panWidthSliderAttachment, panCenterLFOSliderAttachment, panWidthLFOSliderAttachment;
-
-	// Toggle Buttons
-	juce::ToggleButton panWidthLFOToggle, panLFOToggle;
 
 	// Component boxes
 	magna::RotarySliderBox panWidthSliderBox, panCenterSliderBox, panCenterLFOSliderBox;

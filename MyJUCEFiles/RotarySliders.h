@@ -455,7 +455,7 @@ namespace magna {
 
 		void textChanged();
 
-		void updateText();
+		virtual void updateText();
 
 		void updateRange();
 
@@ -506,10 +506,16 @@ namespace magna {
 	protected:
 		void drawRotarySlider(juce::Graphics& g, float sliderPos) override;
 		void handleRotaryDrag(const juce::MouseEvent& e) override;
+
+		void updateText() override;
 	private:
 		// these are used if the slider range is being controlled by a second rotary slider
 		bool hasExternalWidthController = false;
 		juce::Value minValue, maxValue;
+
+		// for displaying whether the pan angle is centred, or biased left or right
+		//std::unique_ptr<juce::Label> biasBox;
+
 	};
 
 };

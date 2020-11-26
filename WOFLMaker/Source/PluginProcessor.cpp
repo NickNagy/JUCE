@@ -26,6 +26,8 @@ WoflmakerAudioProcessor::WoflmakerAudioProcessor()
 	addParameter(panWidthParameter = new juce::AudioParameterInt("width", "Pan Width", 0, (int)PAN_MAX_MAGNITUDE * 2, 0));
 	addParameter(panCenterLFOParameter = new juce::AudioParameterFloat("centerLFO", "Pan Center LFO Rate", 0.0f, (float)MAX_LFO_FREQUENCY_HZ, 0.0f));
 	addParameter(panWidthLFOParameter = new juce::AudioParameterFloat("widthLFO", "Pan Width LFO Rate", 0.0f, (float)MAX_LFO_FREQUENCY_HZ, 0.0f));
+	addParameter(panCenterLFOToggleParameter = new juce::AudioParameterBool("centerLFOToggle", "Pan Center LFO Toggle", false));
+	addParameter(panCenterLFOFunctionMenuChoiceParameter = new juce::AudioParameterInt("centerLFOFunction", "Pan Center LFO Function",0, NUM_LFO_FUNCTIONS-1, 0));
 
 	panCenterLFO.initialise([](float x) { return std::sin(x); }, 128);
 	panCenterLFO.setFrequency(panCenterLFOParameter->get());
@@ -159,11 +161,14 @@ void WoflmakerAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juc
 	// update LFO frequency based on pan center LFO slider value
 	panCenterLFO.setFrequency(panCenterLFOParameter->get()); // force?
 
-	// LFO amplitude is 1 --> to re-map it to the amplitude requested by the GUI we simply multiply by the value of the width slider (attached to panWidthParameter)
-	auto panOscCurrentValue = panCenterLFO.processSample(0.0f) * panWidthParameter->get();
-	// then add the pan-center slider value to get the correct offset
-	panOscCurrentValue += panCenterParameter->get();
-	// and divide again to re-map to a {-1.0, 1.0} space
+	// first, get the offset of the pan from the pan-center slider. This is independent of whether the LFO is toggled ON
+	float panOscCurrentValue = (float)panCenterParameter->get();
+	// Then, IF the LFO is toggled ON, add the current value of oscillation
+	if (panCenterLFOToggleParameter->get()) {
+		// LFO amplitude is 1 --> to re-map it to the amplitude requested by the GUI we simply multiply by the value of the width slider (attached to panWidthParameter)
+		panOscCurrentValue += panCenterLFO.processSample(0.0f) * panWidthParameter->get();
+	}
+	// Divide to re-map to a {-1.0, 1.0} space
 	panOscCurrentValue /= (float)PAN_MAX_MAGNITUDE;
 
 	// channel gains
@@ -200,7 +205,7 @@ bool WoflmakerAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* WoflmakerAudioProcessor::createEditor()
 {
-	return new WoflmakerAudioProcessorEditor(*this, tree, panCenterParameter, panWidthParameter, panCenterLFOParameter, panWidthLFOParameter);
+	return new WoflmakerAudioProcessorEditor(*this, tree, panCenterParameter, panWidthParameter, panCenterLFOParameter, panWidthLFOParameter, panCenterLFOToggleParameter, panCenterLFOFunctionMenuChoiceParameter);
 }
 
 //==============================================================================
@@ -215,6 +220,16 @@ void WoflmakerAudioProcessor::setStateInformation(const void* data, int sizeInBy
 {
 	// You should use this method to restore your parameters from this memory block,
 	// whose contents will have been created by the getStateInformation() call.
+}
+
+void WoflmakerAudioProcessor::setLFOFunction(juce::dsp::Oscillator<float>& lfo, int function) {
+	switch (function) {
+	/* the function passed to initialise() is expected to be mapped to a periodic input between (-pi...pi). */
+	/* for non-trig functions, to map to range (-1.0...1.0) simply have to divide x by pi */
+	default: // sine
+		lfo.initialise([](float x) {return std::sin(x); }, 128);
+		break;
+	}
 }
 
 //==============================================================================

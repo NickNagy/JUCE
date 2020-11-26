@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="iQr0aP" name="WOFLMaker" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              pluginManufacturer="MagnasimiaMedia" companyName="MagnasimiaMedia">
   <MAINGROUP id="IjDfiU" name="WOFLMaker">
     <GROUP id="{E70C909B-AF89-DBE2-73F6-9A5419B1AF45}" name="Source">
       <FILE id="JXAabI" name="PluginProcessor.cpp" compile="1" resource="0"
@@ -53,4 +54,7 @@
     <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
   </MODULES>
+  <LIVE_SETTINGS>
+    <WINDOWS/>
+  </LIVE_SETTINGS>
 </JUCERPROJECT>

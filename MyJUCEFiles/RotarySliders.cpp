@@ -665,4 +665,35 @@ namespace magna {
 		}
 	}
 
+	void PanRotarySlider::updateText() {
+		if (valueBox != nullptr) {
+			auto newValue = (int)currentValue.getValue();
+			/*juce::String bias;
+			if (newValue < 0) {
+				newValue = std::abs(newValue);
+				bias = "(Left)";
+			}
+			else if (newValue == 0) {
+				bias = "(Center)";
+			}
+			else { // newValue > 0
+				bias = "(Right)";
+			}*/
+			auto newValueText = getTextFromValue(newValue);//+ bias;
+			if (newValueText != valueBox->getText())
+				valueBox->setText(newValueText, juce::dontSendNotification);
+		}
+		/*if (biasBox != nullptr) {
+			auto val = (int)currentValue.getValue();
+			if (val == 0 && valueBox->getText()!="Center") {
+				valueBox->setText("Center", juce::dontSendNotification);
+			}
+			else if (val > 0 && valueBox->getText() != "Right") {
+				valueBox->setText("Right", juce::dontSendNotification);
+			}
+			else if (val < 0 && valueBox->getText() != "Left") {
+				valueBox->setText("Left", juce::dontSendNotification);
+			}
+		}*/
+	}
 };

@@ -20,6 +20,6 @@ namespace magna {
 		slider.setBounds(sliderXOffset, sliderYOffset, diameter, diameter);
 
 		// Slider textbox
-		slider.setTextBoxStyle(magna::RotarySlider::TextBoxBelow, true, diameter, ROTARY_TEXTBOX_HEIGHT_AS_PROPORTIOIN_OF_BOX_HEIGHT* height);
+		slider.setTextBoxStyle(magna::RotarySlider::TextBoxBelow, true, diameter, ROTARY_TEXTBOX_HEIGHT_AS_PROPORTIOIN_OF_BOX_HEIGHT*height);
 	}
 }
