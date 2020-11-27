@@ -10,64 +10,11 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "WoflmakerEditorStylesheet.h"
+#include "WoflmakerEditorComponents.h"
 #include "RotarySliders.h"
 #include "Attachments.h"
 #include "ComponentBox.h"
-
-/* To convert the LFO slider(s)' Hz value to a BPM value and display it */
-class LFOSliderListenerLabel : public juce::Slider::Listener, public juce::Label {
-public:
-	LFOSliderListenerLabel() {
-		setText("0", juce::NotificationType::dontSendNotification);
-	};
-	~LFOSliderListenerLabel() override {};
-private:
-	void sliderValueChanged(juce::Slider* slider) override {
-		auto toBPM = slider->getValue() / 60.0f;
-		setText(JUCE_TO_STRING(toBPM), juce::NotificationType::dontSendNotification);
-	}
-};
-
-//====================================================== ROTARY SLIDERS ==================================================//
-
-/* derived from RotarySliders.h, to override colors in constructors for app customization*/
-class WoflRotarySlider : public magna::RotarySlider {
-public:
-	WoflRotarySlider();
-private:
-};
-
-class WoflPanRotarySlider : public magna::RotarySlider {
-public:
-	WoflPanRotarySlider();
-};
-
-//======================================================= LOOK AND FEEL ==================================================//
-
-/* Here are custom lookAndFeels for juce components in the app. These do not affect the designs of magna components */
-
-// Main app
-struct WoflmakerLookAndFeel : public juce::LookAndFeel_V4 {
-	WoflmakerLookAndFeel();
-};
-
-struct SliderBoxLookAndFeel : public juce::LookAndFeel_V4 {
-	SliderBoxLookAndFeel();
-};
-
-/* Proportional height macros should sum up to approx. 1.0 */
-#define APP_TITLE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT 0.2f
-// height of slider box w.r.t app height
-#define SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT 0.3f
-/* other dimension macros */
-#define LFO_WINDOW_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT 0.2f
-#define SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT 0.33f
-#define TOGGLEBUTTON_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT 0.1f
-#define CONTROLBOX_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT 0.5f
-#define TOGGLEBUTTON_WIDTH_AS_PROPORTION_OF_CONTROLBOX_WIDTH 0.33f
-
-#define CONTROLBOX_SLIDERBOX_ROWS 1
-#define CONTROLBOX_SLIDERBOX_COLS 2
 
 #define NUM_LFO_FUNCTIONS 4
 
@@ -121,8 +68,10 @@ private:
 	juce::ComboBoxParameterAttachment panCenterLFOFunctionMenuAttachment;
 
 	// Sliders
-	magna::RotarySlider panWidthSlider, panCenterLFOSlider, panWidthLFOSlider;
-	magna::PanRotarySlider panCenterSlider;
+	//magna::RotarySlider panWidthSlider, panCenterLFOSlider, panWidthLFOSlider;
+	//magna::PanRotarySlider panCenterSlider;
+	WoflRotarySlider panWidthSlider, panCenterLFOSlider, panWidthLFOSlider;
+	WoflPanRotarySlider panCenterSlider;
 
 	// Slider attachments
 	magna::RotarySliderParameterAttachment panCenterSliderAttachment, panWidthSliderAttachment, panCenterLFOSliderAttachment, panWidthLFOSliderAttachment;

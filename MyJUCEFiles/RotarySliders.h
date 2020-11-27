@@ -2,13 +2,18 @@
 #define ROTARY_SLIDERS_H
 
 #include <JuceHeader.h>
+#include "Component.h"
 
 /* these classes are based on the juce::Slider class, but are customized to an extent that inheriting from juce::Slider is not sufficient */
 /* parts of the code are taken from the juce::Slider class directly */
 
+#define ROTARY_THUMBCOLOUR_STR "thumbColour"
+#define ROTARY_SLIDERBODYFILLCOLOUR_STR "sliderBodyFillColour"
+#define ROTARY_SLIDERBODYOUTLINECOLOUR_STR "sliderBodyOutlineColour"
+
 namespace magna {
 	//============================================== BASE CLASS: RotarySlider =============================================================//
-	class RotarySlider : public juce::Component, protected juce::Value::Listener, public juce::AsyncUpdater {
+	class RotarySlider : public juce::Component, protected juce::Value::Listener, public juce::AsyncUpdater, public magna::Component {
 	public:
 		enum TextEntryBoxPosition
 		{
@@ -466,7 +471,7 @@ namespace magna {
 
 		juce::Label* createRotarySliderTextBox();
 
-		virtual void drawRotarySlider(juce::Graphics& g, float sliderPos);
+		virtual void drawRotarySlider(juce::Graphics& g, float rotaryStartAngle, float rotaryEndAngle, float centreX, float centreY, float radius, float sliderPos);
 
 		void sendDragStart();
 
@@ -494,6 +499,7 @@ namespace magna {
 
 	//================================================== DERIVED CLASS: PanRotarySlider =========================================//
 #define PAN_MAX_MAGNITUDE 100
+#define PAN_ROTARY_SLIDERWIDTHRANGECOLOUR_STR "sliderWidthRangeColour"
 
 	class PanRotarySlider : public RotarySlider, public RotarySlider::Listener {
 	public:
@@ -504,7 +510,7 @@ namespace magna {
 		void setValue(double newValue, juce::NotificationType notification) override;
 
 	protected:
-		void drawRotarySlider(juce::Graphics& g, float sliderPos) override;
+		void drawRotarySlider(juce::Graphics& g, float rotaryStartAngle, float rotaryEndAngle, float centreX, float centreY, float radius, float sliderPos) override;
 		void handleRotaryDrag(const juce::MouseEvent& e) override;
 
 		void updateText() override;

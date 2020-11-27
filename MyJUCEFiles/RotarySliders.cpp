@@ -2,7 +2,8 @@
 
 namespace magna {
 	//=========================== ROTARY SLIDER ===============================================//
-	RotarySlider::RotarySlider() : textBoxPos(TextEntryBoxPosition::TextBoxBelow) {
+	RotarySlider::RotarySlider() : textBoxPos(TextEntryBoxPosition::TextBoxBelow)
+	{
 		setWantsKeyboardFocus(false);
 		setRepaintsOnMouseActivity(true);
 		rotaryParams.startAngleRadians = juce::MathConstants<float>::pi * 1.2f;
@@ -11,6 +12,12 @@ namespace magna {
 		lookAndFeelChanged();
 		updateText();
 		currentValue.addListener(this);
+		/* add relevant colour IDs to colourMap with defaults */
+		colourMap = {
+			{ROTARY_THUMBCOLOUR_STR, juce::Colours::white},
+			{ROTARY_SLIDERBODYFILLCOLOUR_STR, juce::Colours::darkgrey},
+			{ROTARY_SLIDERBODYOUTLINECOLOUR_STR, juce::Colours::black}
+		};
 	}
 
 	RotarySlider::~RotarySlider() {
@@ -190,8 +197,17 @@ namespace magna {
 	void RotarySlider::paint(juce::Graphics& g) {
 		auto sliderPos = (float)valueToProportionOfLength(lastCurrentValue);
 		jassert(sliderPos >= 0 && sliderPos <= 1.0f);
-		// TODO: change to use RotarySlider::LookAndFeelMethods::drawRotarySlider()
-		drawRotarySlider(g, sliderPos);
+
+		auto width = sliderRect.getWidth();
+		auto height = sliderRect.getHeight();
+		auto x = sliderRect.getX();
+		auto y = sliderRect.getY();
+
+		auto radius = (float)juce::jmin(width / 2, height / 2) - 4.0f;
+		auto centreX = (float)x + (float)width * 0.5f;
+		auto centreY = (float)y + (float)height * 0.5f;
+
+		drawRotarySlider(g, rotaryParams.startAngleRadians, rotaryParams.endAngleRadians, centreX, centreY, radius, sliderPos);
 	}
 
 	void RotarySlider::resized() {
@@ -295,7 +311,7 @@ namespace magna {
 				}
 			}
 			if (!isEnabled())
-				Component::mouseWheelMove(e, wheel);
+				juce::Component::mouseWheelMove(e, wheel);
 		}
 	}
 
@@ -425,25 +441,16 @@ namespace magna {
 		return l;
 	}
 
-	void RotarySlider::drawRotarySlider(juce::Graphics& g, float sliderPos) {
-		auto width = sliderRect.getWidth();
-		auto height = sliderRect.getHeight();
-		auto x = sliderRect.getX();
-		auto y = sliderRect.getY();
-		auto rotaryStartAngle = rotaryParams.startAngleRadians;
-		auto rotaryEndAngle = rotaryParams.endAngleRadians;
-		auto radius = (float)juce::jmin(width / 2, height / 2) - 4.0f;
-		auto centreX = (float)x + (float)width * 0.5f;
-		auto centreY = (float)y + (float)height * 0.5f;
+	void RotarySlider::drawRotarySlider(juce::Graphics& g, float rotaryStartAngle, float rotaryEndAngle, float centreX, float centreY, float radius, float sliderPos) {
 		auto rx = centreX - radius;
 		auto ry = centreY - radius;
 		auto rw = radius * 2.0f;
 		auto angle = rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
 
-		g.setColour(findColour(rotarySliderFillColourId));
+		g.setColour(colourMap[ROTARY_SLIDERBODYFILLCOLOUR_STR]);
 		g.fillEllipse(rx, ry, rw, rw);
 
-		g.setColour(findColour(rotarySliderOutlineColourId));
+		g.setColour(colourMap[ROTARY_SLIDERBODYOUTLINECOLOUR_STR]);
 		g.drawEllipse(rx, ry, rw, rw, 1.0f);
 
 		juce::Path p;
@@ -452,7 +459,7 @@ namespace magna {
 		p.addRectangle(-pointerThickness * 0.5f, -radius, pointerThickness, pointerLength);
 		p.applyTransform(juce::AffineTransform::rotation(angle).translated(centreX, centreY));
 
-		g.setColour(findColour(thumbColourId));
+		g.setColour(colourMap[ROTARY_THUMBCOLOUR_STR]);
 		g.fillPath(p);
 	}
 
@@ -536,6 +543,7 @@ namespace magna {
 		maxValue.setValue(0);
 		minValue.addListener(this);
 		maxValue.addListener(this);
+		magna::Component::setColour(PAN_ROTARY_SLIDERWIDTHRANGECOLOUR_STR, juce::Colours::yellow);
 	}
 
 	PanRotarySlider::~PanRotarySlider() {
@@ -567,46 +575,20 @@ namespace magna {
 	}
 
 	// TODO: move this to PanRotarySlider::LookAndFeelMethods::drawRotarySlider()
-	void PanRotarySlider::drawRotarySlider(juce::Graphics& g, float sliderPos) {
-		auto width = sliderRect.getWidth();
-		auto height = sliderRect.getHeight();
-		auto x = sliderRect.getX();
-		auto y = sliderRect.getY();
-		auto rotaryStartAngle = rotaryParams.startAngleRadians;
-		auto rotaryEndAngle = rotaryParams.endAngleRadians;
-		auto radius = (float)juce::jmin(width / 2, height / 2) - 4.0f;
-		auto centreX = (float)x + (float)width * 0.5f;
-		auto centreY = (float)y + (float)height * 0.5f;
-		auto rx = centreX - radius;
-		auto ry = centreY - radius;
-		auto rw = radius * 2.0f;
-		auto angle = rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
+	void PanRotarySlider::drawRotarySlider(juce::Graphics& g, float rotaryStartAngle, float rotaryEndAngle, float centreX, float centreY, float radius, float sliderPos) {
 
-		g.setColour(findColour(rotarySliderFillColourId));
-		g.fillEllipse(rx, ry, rw, rw);
-
-		g.setColour(findColour(rotarySliderOutlineColourId));
-		g.drawEllipse(rx, ry, rw, rw, 1.0f);
-
-		juce::Path p;
-		auto pointerLength = radius * 0.33f;
-		auto pointerThickness = 2.0f;
-		p.addRectangle(-pointerThickness * 0.5f, -radius, pointerThickness, pointerLength);
-		p.applyTransform(juce::AffineTransform::rotation(angle).translated(centreX, centreY));
-
-		g.setColour(findColour(thumbColourId));
-		g.fillPath(p);
+		RotarySlider::drawRotarySlider(g, rotaryStartAngle, rotaryEndAngle, centreX, centreY, radius, sliderPos);
 
 		// if slider's range is controlled by an external slider, draw the range
 		if (hasExternalWidthController) {
 			juce::Path panRangeArc;
-			float panRangeArcThickness = 2.0f;
+			float panRangeArcThickness = 1.0f;
 			auto minValuePos = valueToProportionOfLength(minValue.getValue());
 			auto maxValuePos = valueToProportionOfLength(maxValue.getValue());
 			auto rangeMinAngle = rotaryStartAngle + minValuePos * (rotaryEndAngle - rotaryStartAngle);
 			auto rangeMaxAngle = rotaryStartAngle + maxValuePos * (rotaryEndAngle - rotaryStartAngle);
 			panRangeArc.addCentredArc(centreX, centreY, radius, radius, 0.0f, rangeMinAngle, rangeMaxAngle, true);
-			g.setColour(juce::Colours::green);
+			g.setColour(colourMap[PAN_ROTARY_SLIDERWIDTHRANGECOLOUR_STR]);
 			g.strokePath(panRangeArc, juce::PathStrokeType(panRangeArcThickness, juce::PathStrokeType::curved, juce::PathStrokeType::square));
 		}
 	}

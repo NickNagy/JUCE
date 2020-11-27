@@ -9,30 +9,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-//========================================= ROTARY SLIDERS =============================================//
-
-WoflRotarySlider::WoflRotarySlider() {
-    setColour(rotarySliderOutlineColourId, juce::Colours::black);
-    setColour(thumbColourId, juce::Colours::aquamarine);
-}
-
-WoflPanRotarySlider::WoflPanRotarySlider() {
-}
-
-//========================================= LOOK AND FEEL ==============================================//
-
-// Main app
-WoflmakerLookAndFeel::WoflmakerLookAndFeel() {
-    setColour(juce::ResizableWindow::backgroundColourId, juce::Colours::darkslategrey);
-    setColour(juce::Label::textColourId, juce::Colours::orange);
-}
-
-// Slider boxes
-SliderBoxLookAndFeel::SliderBoxLookAndFeel() {
-    setColour(juce::ResizableWindow::backgroundColourId, juce::Colours::black);
-    setColour(juce::Label::textColourId, juce::Colours::yellow);
-}
-
 //======================================== APP ===========================================================//
 WoflmakerAudioProcessorEditor::WoflmakerAudioProcessorEditor (WoflmakerAudioProcessor& p, juce::AudioProcessorValueTreeState& params, juce::AudioParameterInt * panCenterParameter, juce::AudioParameterInt * panWidthParameter,
     juce::AudioParameterFloat * panCenterLFOParameter, juce::AudioParameterFloat * panWidthLFOParameter, juce::AudioParameterBool* panCenterLFOToggleParameter, juce::AudioParameterInt* panCenterLFOFunctionParameter)
@@ -104,31 +80,31 @@ void WoflmakerAudioProcessorEditor::paint (juce::Graphics& g)
 
 void WoflmakerAudioProcessorEditor::resized()
 {
-    jassert(CONTROLBOX_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT + SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT + APP_TITLE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT <= 1.0);
+    jassert(WOFL_CONTROLBOX_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT + WOFL_SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT + WOFL_APP_TITLE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT <= 1.0);
 
     auto width = getWidth();
     auto height = getHeight();
 
-    auto freeYSpace = 1.0f - (APP_TITLE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT + SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT + CONTROLBOX_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT);
+    auto freeYSpace = 1.0f - (WOFL_APP_TITLE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT + WOFL_SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT + WOFL_CONTROLBOX_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT);
 
     // App Title
     auto appTitleYOffset = 0;
-    auto appTitleHeight = height * APP_TITLE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT;
+    auto appTitleHeight = height * WOFL_APP_TITLE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT;
     appTitle.setBounds(0, appTitleYOffset, width, appTitleHeight);
 
     // Slider boxes
     auto sliderBoxYOffset = appTitleYOffset + appTitleHeight;
-    auto sliderBoxHeight = height * SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT; // /(float)SLIDERS_PER_COLUMN;
+    auto sliderBoxHeight = height * WOFL_SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT; // /(float)SLIDERS_PER_COLUMN;
     panCenterSliderBox.setBounds(0, sliderBoxYOffset, width, sliderBoxHeight);
 
     // Control box
     auto controlBoxYOffset = sliderBoxHeight + sliderBoxYOffset;
-    auto controlBoxHeight = height * CONTROLBOX_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT;
+    auto controlBoxHeight = height * WOFL_CONTROLBOX_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT;
     controlBox.setBounds(0, controlBoxYOffset, width, controlBoxHeight);
 }
 
 void WoflmakerAudioProcessorEditor::LFOControlBox::resized() {
-    jassert(TOGGLEBUTTON_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT + SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT* CONTROLBOX_SLIDERBOX_COLS + LFO_WINDOW_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT <= 1.0);
+    jassert(WOFL_TOGGLEBUTTON_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT + WOFL_SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT* WOFL_CONTROLBOX_SLIDERBOX_COLS + WOFL_LFO_WINDOW_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT <= 1.0);
 
     auto bounds = getBounds();
 
@@ -138,15 +114,15 @@ void WoflmakerAudioProcessorEditor::LFOControlBox::resized() {
     auto y = bounds.getY();
 
     // may use to spread out components freely
-    auto freeYSpace = 1.0f - (TOGGLEBUTTON_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT + SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT * CONTROLBOX_SLIDERBOX_COLS + LFO_WINDOW_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT);
+    auto freeYSpace = 1.0f - (WOFL_TOGGLEBUTTON_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT + WOFL_SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT * WOFL_CONTROLBOX_SLIDERBOX_COLS + WOFL_LFO_WINDOW_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT);
 
-    auto toggleButtonHeight = TOGGLEBUTTON_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT * height;
-    auto toggleButtonWidth = TOGGLEBUTTON_WIDTH_AS_PROPORTION_OF_CONTROLBOX_WIDTH * width;
+    auto toggleButtonHeight = WOFL_TOGGLEBUTTON_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT * height;
+    auto toggleButtonWidth = WOFL_TOGGLEBUTTON_WIDTH_AS_PROPORTION_OF_CONTROLBOX_WIDTH * width;
     // for now, top-left
     toggleButton.setBounds(x, y, toggleButtonWidth, toggleButtonHeight);
 
     auto sliderBoxYOffset = y + toggleButtonHeight;
-    auto sliderBoxHeight = height * SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT;
+    auto sliderBoxHeight = height * WOFL_SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT;
     widthSliderBox.setBounds(x, sliderBoxYOffset, width, sliderBoxHeight);
     sliderBoxYOffset += sliderBoxHeight;
     lfoSliderBox.setBounds(x, sliderBoxYOffset, width, sliderBoxHeight);

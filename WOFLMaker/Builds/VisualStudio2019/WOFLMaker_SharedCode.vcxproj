@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\MyJUCEFiles\Attachments.cpp" />
     <ClCompile Include="..\..\..\MyJUCEFiles\ColoursAndGradients.cpp" />
+    <ClCompile Include="..\..\..\MyJUCEFiles\Component.cpp" />
     <ClCompile Include="..\..\..\MyJUCEFiles\ComponentBox.cpp" />
     <ClCompile Include="..\..\..\MyJUCEFiles\RotarySliders.cpp" />
     <ClCompile Include="..\..\Source\PluginProcessor.cpp" />
@@ -2128,10 +2129,12 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_graphics.cpp" />
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_basics.cpp" />
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp" />
+    <ClCompile Include="..\..\Source\WoflmakerEditorComponents.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\MyJUCEFiles\Attachments.h" />
     <ClInclude Include="..\..\..\MyJUCEFiles\ColoursAndGradients.h" />
+    <ClInclude Include="..\..\..\MyJUCEFiles\Component.h" />
     <ClInclude Include="..\..\..\MyJUCEFiles\ComponentBox.h" />
     <ClInclude Include="..\..\..\MyJUCEFiles\RotarySliders.h" />
     <ClInclude Include="..\..\Source\PluginProcessor.h" />
@@ -2915,6 +2918,8 @@
     <ClInclude Include="..\..\..\..\..\..\..\..\JUCE\modules\juce_gui_extra\juce_gui_extra.h" />
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h" />
     <ClInclude Include="..\..\JuceLibraryCode\JucePluginDefines.h" />
+    <ClInclude Include="..\..\Source\WoflmakerEditorComponents.h" />
+    <ClInclude Include="..\..\Source\WoflmakerEditorStylesheet.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\..\..\..\JUCE\modules\juce_audio_devices\native\oboe\CMakeLists.txt" />
