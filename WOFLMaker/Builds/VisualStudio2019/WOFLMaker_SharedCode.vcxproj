@@ -129,13 +129,14 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\PluginProcessor.cpp" />
+    <ClCompile Include="..\..\Source\PluginEditor.cpp" />
     <ClCompile Include="..\..\..\MyJUCEFiles\Attachments.cpp" />
+    <ClCompile Include="..\..\..\MyJUCEFiles\AudioVisualizers.cpp" />
     <ClCompile Include="..\..\..\MyJUCEFiles\ColoursAndGradients.cpp" />
     <ClCompile Include="..\..\..\MyJUCEFiles\Component.cpp" />
     <ClCompile Include="..\..\..\MyJUCEFiles\ComponentBox.cpp" />
     <ClCompile Include="..\..\..\MyJUCEFiles\RotarySliders.cpp" />
-    <ClCompile Include="..\..\Source\PluginProcessor.cpp" />
-    <ClCompile Include="..\..\Source\PluginEditor.cpp" />
     <ClCompile Include="..\..\..\..\..\..\..\..\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
@@ -2116,6 +2117,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\..\JUCE\modules\juce_gui_extra\juce_gui_extra.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp" />
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_audio_basics.cpp" />
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_audio_devices.cpp" />
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_audio_formats.cpp" />
@@ -2132,13 +2134,15 @@
     <ClCompile Include="..\..\Source\WoflmakerEditorComponents.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\PluginProcessor.h" />
+    <ClInclude Include="..\..\Source\PluginEditor.h" />
     <ClInclude Include="..\..\..\MyJUCEFiles\Attachments.h" />
+    <ClInclude Include="..\..\..\MyJUCEFiles\AudioVisualizers.h" />
     <ClInclude Include="..\..\..\MyJUCEFiles\ColoursAndGradients.h" />
     <ClInclude Include="..\..\..\MyJUCEFiles\Component.h" />
     <ClInclude Include="..\..\..\MyJUCEFiles\ComponentBox.h" />
     <ClInclude Include="..\..\..\MyJUCEFiles\RotarySliders.h" />
-    <ClInclude Include="..\..\Source\PluginProcessor.h" />
-    <ClInclude Include="..\..\Source\PluginEditor.h" />
+    <ClInclude Include="..\..\..\MyJUCEFiles\ThreadFunctions.h" />
     <ClInclude Include="..\..\..\..\..\..\..\..\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h" />
     <ClInclude Include="..\..\..\..\..\..\..\..\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.h" />
     <ClInclude Include="..\..\..\..\..\..\..\..\JUCE\modules\juce_audio_basics\buffers\juce_AudioDataConverters.h" />
@@ -2916,12 +2920,16 @@
     <ClInclude Include="..\..\..\..\..\..\..\..\JUCE\modules\juce_gui_extra\misc\juce_WebBrowserComponent.h" />
     <ClInclude Include="..\..\..\..\..\..\..\..\JUCE\modules\juce_gui_extra\native\juce_mac_CarbonViewWrapperComponent.h" />
     <ClInclude Include="..\..\..\..\..\..\..\..\JUCE\modules\juce_gui_extra\juce_gui_extra.h" />
+    <ClInclude Include="..\..\JuceLibraryCode\BinaryData.h" />
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h" />
     <ClInclude Include="..\..\JuceLibraryCode\JucePluginDefines.h" />
     <ClInclude Include="..\..\Source\WoflmakerEditorComponents.h" />
     <ClInclude Include="..\..\Source\WoflmakerEditorStylesheet.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\MyJUCEFiles\README.md" />
+    <None Include="..\..\..\..\..\..\Desktop\wp2418964.jpg" />
+    <None Include="..\..\..\..\..\..\Desktop\3806905090_ce4e1f6c7e_o.jpg" />
     <None Include="..\..\..\..\..\..\..\..\JUCE\modules\juce_audio_devices\native\oboe\CMakeLists.txt" />
     <None Include="..\..\..\..\..\..\..\..\JUCE\modules\juce_audio_devices\native\oboe\readme.md" />
     <None Include="..\..\..\..\..\..\..\..\JUCE\modules\juce_audio_formats\codecs\flac\Flac Licence.txt" />

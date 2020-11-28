@@ -4,6 +4,9 @@
     <Filter Include="WOFLMaker\Source">
       <UniqueIdentifier>{0A6057B4-8E61-E38B-95C3-72448FCFB29B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="WOFLMaker\MyJUCEFiles">
+      <UniqueIdentifier>{0BF55251-D7C9-936F-E786-ABDB0A12D7C5}</UniqueIdentifier>
+    </Filter>
     <Filter Include="WOFLMaker">
       <UniqueIdentifier>{524C136F-2FAC-B8AB-93AA-88238CD8F88B}</UniqueIdentifier>
     </Filter>
@@ -455,6 +458,24 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\PluginEditor.cpp">
       <Filter>WOFLMaker\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MyJUCEFiles\Attachments.cpp">
+      <Filter>WOFLMaker\MyJUCEFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MyJUCEFiles\AudioVisualizers.cpp">
+      <Filter>WOFLMaker\MyJUCEFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MyJUCEFiles\ColoursAndGradients.cpp">
+      <Filter>WOFLMaker\MyJUCEFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MyJUCEFiles\Component.cpp">
+      <Filter>WOFLMaker\MyJUCEFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MyJUCEFiles\ComponentBox.cpp">
+      <Filter>WOFLMaker\MyJUCEFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MyJUCEFiles\RotarySliders.cpp">
+      <Filter>WOFLMaker\MyJUCEFiles</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\..\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.cpp">
       <Filter>JUCE Modules\juce_audio_basics\buffers</Filter>
@@ -2436,6 +2457,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\..\JUCE\modules\juce_gui_extra\juce_gui_extra.cpp">
       <Filter>JUCE Modules\juce_gui_extra</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp">
+      <Filter>JUCE Library Code</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_audio_basics.cpp">
       <Filter>JUCE Library Code</Filter>
     </ClCompile>
@@ -2475,21 +2499,6 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp">
       <Filter>JUCE Library Code</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\MyJUCEFiles\ComponentBox.cpp">
-      <Filter>WOFLMaker\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\MyJUCEFiles\RotarySliders.cpp">
-      <Filter>WOFLMaker\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\MyJUCEFiles\ColoursAndGradients.cpp">
-      <Filter>WOFLMaker\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\MyJUCEFiles\Attachments.cpp">
-      <Filter>WOFLMaker\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\MyJUCEFiles\Component.cpp">
-      <Filter>WOFLMaker\Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\WoflmakerEditorComponents.cpp">
       <Filter>WOFLMaker\Source</Filter>
     </ClCompile>
@@ -2500,6 +2509,27 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\PluginEditor.h">
       <Filter>WOFLMaker\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MyJUCEFiles\Attachments.h">
+      <Filter>WOFLMaker\MyJUCEFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MyJUCEFiles\AudioVisualizers.h">
+      <Filter>WOFLMaker\MyJUCEFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MyJUCEFiles\ColoursAndGradients.h">
+      <Filter>WOFLMaker\MyJUCEFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MyJUCEFiles\Component.h">
+      <Filter>WOFLMaker\MyJUCEFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MyJUCEFiles\ComponentBox.h">
+      <Filter>WOFLMaker\MyJUCEFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MyJUCEFiles\RotarySliders.h">
+      <Filter>WOFLMaker\MyJUCEFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MyJUCEFiles\ThreadFunctions.h">
+      <Filter>WOFLMaker\MyJUCEFiles</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\..\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h">
       <Filter>JUCE Modules\juce_audio_basics\audio_play_head</Filter>
@@ -4832,26 +4862,14 @@
     <ClInclude Include="..\..\..\..\..\..\..\..\JUCE\modules\juce_gui_extra\juce_gui_extra.h">
       <Filter>JUCE Modules\juce_gui_extra</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\JuceLibraryCode\BinaryData.h">
+      <Filter>JUCE Library Code</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h">
       <Filter>JUCE Library Code</Filter>
     </ClInclude>
     <ClInclude Include="..\..\JuceLibraryCode\JucePluginDefines.h">
       <Filter>JUCE Library Code</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\MyJUCEFiles\ComponentBox.h">
-      <Filter>WOFLMaker\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\MyJUCEFiles\RotarySliders.h">
-      <Filter>WOFLMaker\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\MyJUCEFiles\ColoursAndGradients.h">
-      <Filter>WOFLMaker\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\MyJUCEFiles\Attachments.h">
-      <Filter>WOFLMaker\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\MyJUCEFiles\Component.h">
-      <Filter>WOFLMaker\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\WoflmakerEditorComponents.h">
       <Filter>WOFLMaker\Source</Filter>
@@ -4861,6 +4879,15 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\MyJUCEFiles\README.md">
+      <Filter>WOFLMaker\MyJUCEFiles</Filter>
+    </None>
+    <None Include="..\..\..\..\..\..\Desktop\wp2418964.jpg">
+      <Filter>WOFLMaker</Filter>
+    </None>
+    <None Include="..\..\..\..\..\..\Desktop\3806905090_ce4e1f6c7e_o.jpg">
+      <Filter>WOFLMaker</Filter>
+    </None>
     <None Include="..\..\..\..\..\..\..\..\JUCE\modules\juce_audio_devices\native\oboe\CMakeLists.txt">
       <Filter>JUCE Modules\juce_audio_devices\native\oboe</Filter>
     </None>

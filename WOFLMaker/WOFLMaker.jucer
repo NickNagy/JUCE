@@ -13,6 +13,32 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="mWn9vw" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
+    <GROUP id="{58C12056-F44A-6844-DD49-EC2EDDB522B0}" name="MyJUCEFiles">
+      <FILE id="UsSbVl" name="Attachments.cpp" compile="1" resource="0" file="../MyJUCEFiles/Attachments.cpp"/>
+      <FILE id="bP0uvq" name="Attachments.h" compile="0" resource="0" file="../MyJUCEFiles/Attachments.h"/>
+      <FILE id="d20FIM" name="AudioVisualizers.cpp" compile="1" resource="0"
+            file="../MyJUCEFiles/AudioVisualizers.cpp"/>
+      <FILE id="u1ZAyp" name="AudioVisualizers.h" compile="0" resource="0"
+            file="../MyJUCEFiles/AudioVisualizers.h"/>
+      <FILE id="Q5y12L" name="ColoursAndGradients.cpp" compile="1" resource="0"
+            file="../MyJUCEFiles/ColoursAndGradients.cpp"/>
+      <FILE id="vZWRNs" name="ColoursAndGradients.h" compile="0" resource="0"
+            file="../MyJUCEFiles/ColoursAndGradients.h"/>
+      <FILE id="z03sy3" name="Component.cpp" compile="1" resource="0" file="../MyJUCEFiles/Component.cpp"/>
+      <FILE id="qQdrJJ" name="Component.h" compile="0" resource="0" file="../MyJUCEFiles/Component.h"/>
+      <FILE id="SROwTZ" name="ComponentBox.cpp" compile="1" resource="0"
+            file="../MyJUCEFiles/ComponentBox.cpp"/>
+      <FILE id="QOa3e2" name="ComponentBox.h" compile="0" resource="0" file="../MyJUCEFiles/ComponentBox.h"/>
+      <FILE id="pewyhX" name="README.md" compile="0" resource="1" file="../MyJUCEFiles/README.md"/>
+      <FILE id="YBR9qp" name="RotarySliders.cpp" compile="1" resource="0"
+            file="../MyJUCEFiles/RotarySliders.cpp"/>
+      <FILE id="q2IOfk" name="RotarySliders.h" compile="0" resource="0" file="../MyJUCEFiles/RotarySliders.h"/>
+      <FILE id="eHy7mG" name="ThreadFunctions.h" compile="0" resource="0"
+            file="../MyJUCEFiles/ThreadFunctions.h"/>
+    </GROUP>
+    <FILE id="UP6WSr" name="wp2418964.jpg" compile="0" resource="1" file="../../../../Desktop/wp2418964.jpg"/>
+    <FILE id="BOGCjg" name="3806905090_ce4e1f6c7e_o.jpg" compile="0" resource="1"
+          file="../../../../Desktop/3806905090_ce4e1f6c7e_o.jpg"/>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>

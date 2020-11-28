@@ -75,43 +75,48 @@ WoflmakerAudioProcessorEditor::~WoflmakerAudioProcessorEditor()
 void WoflmakerAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll(findColour(juce::ResizableWindow::backgroundColourId));
+    g.fillAll(WOFL_APP_BACKGROUNDCOLOUR);//findColour(juce::ResizableWindow::backgroundColourId));
+
+    // app title border
+    auto area = appTitle.getBounds();
+    g.drawImageWithin(WOFL_APP_BACKGROUND_IMAGE, area.getX(), area.getY(), area.getWidth(), area.getHeight(), WOFL_IMAGE_RECTANGLE_FILLTYPE);
+    g.setColour(WOFL_APP_TITLE_BORDERCOLOUR);
+    g.drawRoundedRectangle(appTitle.getBounds().toFloat(), 5.0f, 1.0f);
+
+    // pan center slider box
+    area = panCenterSliderBox.getBounds();
+    g.drawImageWithin(WOFL_PAN_ROTARY_SLIDERBOX_IMAGE, area.getX(), area.getY(), area.getWidth(), area.getHeight(), WOFL_IMAGE_RECTANGLE_FILLTYPE);
+
+    // control box
+    area = controlBox.getBounds();
+    /*g.setColour(WOFL_CONTROLBOX_BACKGROUNDCOLOUR);
+    g.fillRoundedRectangle(controlBoxBounds, 5.0f);*/
+    g.drawImageWithin(WOFL_CONTROLBOX_BACKGROUND_IMAGE, area.getX(), area.getY(), area.getWidth(), area.getHeight(), WOFL_IMAGE_RECTANGLE_FILLTYPE);
+    g.setColour(WOFL_CONTROLBOX_BORDERCOLOUR);
+    g.drawRoundedRectangle(area.toFloat(), 5.0f, 1.0f);
 }
 
 
 // TODO: layout by rectangle subdivision
 void WoflmakerAudioProcessorEditor::resized()
 {
-    jassert(WOFL_CONTROLBOX_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT + WOFL_SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT + WOFL_APP_TITLE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT <= 1.0);
-
     auto area = getBounds();
-    auto width = getWidth();
-    auto height = getHeight();
+    auto height = area.getHeight();
+    auto width = area.getWidth();
 
-    auto freeYSpace = 1.0f - (WOFL_APP_TITLE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT + WOFL_SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT + WOFL_CONTROLBOX_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT);
-    // space between title and pan slider, pan slider and controlbox, and controlbox and bottom of app
-    freeYSpace /= 3;
-
-    // App Title
     auto appTitleHeight = height * WOFL_APP_TITLE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT;
-    auto sliderBoxHeight = height * WOFL_SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT;
-    auto controlBoxHeight = height * WOFL_CONTROLBOX_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT;
-    auto controlBoxWidth = width * WOFL_CONTROLBOX_WIDTH_AS_PROPORTION_OF_APP_WIDTH;
+    auto panCenterSliderBoxHeight = height * WOFL_PAN_SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT;
 
     appTitle.setBounds(area.removeFromTop(appTitleHeight));
-    area.removeFromTop(freeYSpace);
-    area.removeFromBottom(freeYSpace);
-    panCenterSliderBox.setBounds(area.removeFromTop(sliderBoxHeight));
-    area.removeFromTop(freeYSpace);
+    panCenterSliderBox.setBounds(area.removeFromTop(panCenterSliderBoxHeight));
 
-    // Control box
-    auto widthToRemoveFromSides = 0.5 * (width - controlBoxWidth);
-    area.removeFromLeft(widthToRemoveFromSides);
-    area.removeFromRight(widthToRemoveFromSides);
-    controlBox.setBounds(area);
+    auto deltaX = area.getWidth() * WOFL_APP_SPACE_CONTROLBOX_REDUCTION_FACTOR;
+    auto deltaY = area.getHeight() * WOFL_APP_SPACE_CONTROLBOX_REDUCTION_FACTOR;
+    controlBox.setBounds(area.reduced(deltaX, deltaY));
 }
 
-// TODO: layout by rectangle subdivision
+// ========================================================================= CONTROL BOX ========================================================================== //
+
 void WoflmakerAudioProcessorEditor::LFOControlBox::resized() {
     jassert(WOFL_TOGGLEBUTTON_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT + WOFL_SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT* WOFL_CONTROLBOX_SLIDERBOX_COLS + WOFL_LFO_WINDOW_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT <= 1.0);
 
@@ -119,22 +124,16 @@ void WoflmakerAudioProcessorEditor::LFOControlBox::resized() {
     auto width = area.getWidth();
     auto height = area.getHeight();
 
-    // may use to spread out components freely
-    auto freeYSpace = 1.0f - (WOFL_TOGGLEBUTTON_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT + WOFL_SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT * WOFL_CONTROLBOX_SLIDERBOX_COLS + WOFL_LFO_WINDOW_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT);
-    // space between title, 2 sliderboxes, lfo window
-    freeYSpace /= 4;
+    auto toggleButtonHeight = 20;
+    auto toggleButtonWidth = 60;
+    auto lfoWindowHeight = height * WOFL_LFO_WINDOW_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT;
 
-    auto sliderBoxSpaceHeight = WOFL_SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT * height;
-    auto sliderBoxHeight = sliderBoxSpaceHeight / WOFL_CONTROLBOX_SLIDERBOX_COLS;
-    auto toggleButtonHeight = WOFL_TOGGLEBUTTON_HEIGHT_AS_PROPORTION_OF_CONTROLBOX_HEIGHT * height;
-    auto toggleButtonWidth = WOFL_TOGGLEBUTTON_WIDTH_AS_PROPORTION_OF_CONTROLBOX_WIDTH * width;
-    // for now, top-left
-    toggleButton.setBounds(area.removeFromTop(toggleButtonHeight));
-    area.removeFromTop(freeYSpace); // betwen title and width sliderbox
-    area.removeFromBottom(freeYSpace); // between LFO window and bottom of control box
+    toggleButton.setBounds(getX(), getY(), toggleButtonWidth, toggleButtonHeight);
+    area.removeFromTop(toggleButtonHeight);
+    area.removeFromBottom(lfoWindowHeight); // lfoWindow.setBounds(area.removeFromBottom(lfoWindowHeight).reduced(WOFL_CONTROLBOX_SPACE_LFO_WINDOW_REDUCTION_FACTOR));
+
+    auto sliderBoxHeight = area.getHeight()/2;
+
     widthSliderBox.setBounds(area.removeFromTop(sliderBoxHeight));
-    area.removeFromTop(freeYSpace);
-    lfoSliderBox.setBounds(area.removeFromTop(sliderBoxHeight));
-    // LFO window
-    // TODO
+    lfoSliderBox.setBounds(area);
 }
