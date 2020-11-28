@@ -19,9 +19,8 @@ namespace magna {
 		}
 	};
 
-#define ROTARY_TITLE_HEIGHT_AS_PROPORTION_OF_BOX_HEIGHT 0.15f
-#define ROTARY_TEXTBOX_HEIGHT_AS_PROPORTIOIN_OF_BOX_HEIGHT 0.1f
-#define ROTARY_DIAMETER_AS_PROPORTION_OF_BOX_MIN_SPAN 0.5f
+#define ROTARY_DIAMETER_AS_PROPORTION_OF_ROTARY_SPACE 0.9f
+
 	struct RotarySliderBox : public ComponentBox {
 		magna::RotarySlider& slider;
 

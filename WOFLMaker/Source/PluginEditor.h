@@ -68,8 +68,6 @@ private:
 	juce::ComboBoxParameterAttachment panCenterLFOFunctionMenuAttachment;
 
 	// Sliders
-	//magna::RotarySlider panWidthSlider, panCenterLFOSlider, panWidthLFOSlider;
-	//magna::PanRotarySlider panCenterSlider;
 	WoflRotarySlider panWidthSlider, panCenterLFOSlider, panWidthLFOSlider;
 	WoflPanRotarySlider panCenterSlider;
 

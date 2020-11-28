@@ -31,6 +31,8 @@ private:
 class WoflPanRotarySlider : public magna::PanRotarySlider {
 public:
 	WoflPanRotarySlider();
+private:
+	juce::GlowEffect glow;
 };
 
 //======================================================= LOOK AND FEEL ==================================================//

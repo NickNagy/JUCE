@@ -11,6 +11,7 @@ WoflPanRotarySlider::WoflPanRotarySlider() {
     magna::Component::setColour(ROTARY_SLIDERBODYFILLCOLOUR_STR, WOFL_ROTARY_BODYCOLOUR);
     magna::Component::setColour(ROTARY_THUMBCOLOUR_STR, WOFL_ROTARY_THUMBCOLOUR);
     magna::Component::setColour(PAN_ROTARY_SLIDERWIDTHRANGECOLOUR_STR, WOFL_PAN_ROTARY_WIDTHINDICATORCOLOUR_LFO_ENABLED);
+    //setComponentEffect(&glow);
 }
 
 //========================================= LOOK AND FEEL ==============================================//
