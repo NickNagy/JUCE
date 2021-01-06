@@ -19,11 +19,11 @@ WoflmakerAudioProcessorEditor::WoflmakerAudioProcessorEditor (WoflmakerAudioProc
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (200, 600);
+    setSize(WOFL_APP_START_WIDTH, appTitleHeight + mainControlBoxHeight + lfoControlBoxExtHeight);
 
     // App title
     appTitle.setText("wOFL\nPan", juce::NotificationType::dontSendNotification);
-    appTitle.setFont({ 15.0f, juce::Font::bold & juce::Font::italic });
+    appTitle.setFont({ 25.0f, juce::Font::bold & juce::Font::italic });
     appTitle.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(appTitle);
 
@@ -34,10 +34,6 @@ WoflmakerAudioProcessorEditor::WoflmakerAudioProcessorEditor (WoflmakerAudioProc
 
     // Pan Center slider
     addAndMakeVisible(panCenterSlider);
-
-    // Pan Width LFO slider
-    //panWidthLFOSlider.setRange(0, (float)MAX_LFO_FREQUENCY_HZ, 0.1f);
-    //panWidthLFOSlider.setTextValueSuffix("Hz");
 
     // Pan Center LFO slider
     panCenterLFOSlider.setRange(0, (float)MAX_LFO_FREQUENCY_HZ, 0.1f);
@@ -77,23 +73,37 @@ void WoflmakerAudioProcessorEditor::paint (juce::Graphics& g)
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll(WOFL_APP_BACKGROUNDCOLOUR);//findColour(juce::ResizableWindow::backgroundColourId));
 
-    // app title border
-    auto area = appTitle.getBounds();
-    g.drawImageWithin(WOFL_APP_BACKGROUND_IMAGE, area.getX(), area.getY(), area.getWidth(), area.getHeight(), WOFL_IMAGE_RECTANGLE_FILLTYPE);
-    g.setColour(WOFL_APP_TITLE_BORDERCOLOUR);
-    g.drawRoundedRectangle(appTitle.getBounds().toFloat(), 5.0f, 1.0f);
+    auto area = getBounds();
+    auto height = area.getHeight();
+    auto width = area.getWidth();
+
+    auto titleBorderThickness = 5.0f;
+    auto defaultBorderThickness = 2.0f;
+
+    // app title
+    auto appTitleArea = area.removeFromTop(appTitleHeight);
+    g.setColour(juce::Colours::black);
+    g.fillRect(appTitleArea);
+    g.setColour(juce::Colours::orange);
+    g.drawRect(appTitleArea, titleBorderThickness);
 
     // pan center slider box
-    area = panCenterSliderBox.getBounds();
-    g.drawImageWithin(WOFL_PAN_ROTARY_SLIDERBOX_IMAGE, area.getX(), area.getY(), area.getWidth(), area.getHeight(), WOFL_IMAGE_RECTANGLE_FILLTYPE);
+    auto panCenterSliderBoxArea = area.removeFromTop(mainControlBoxHeight);
+    g.setColour(juce::Colours::grey);
+    g.fillRect(panCenterSliderBoxArea);
+    g.setColour(juce::Colours::white);
+    g.drawRect(panCenterSliderBoxArea, defaultBorderThickness);
+
+    // external area around control box
+    g.setColour(juce::Colours::orange);
+    g.fillRect(area);
 
     // control box
-    area = controlBox.getBounds();
-    /*g.setColour(WOFL_CONTROLBOX_BACKGROUNDCOLOUR);
-    g.fillRoundedRectangle(controlBoxBounds, 5.0f);*/
-    g.drawImageWithin(WOFL_CONTROLBOX_BACKGROUND_IMAGE, area.getX(), area.getY(), area.getWidth(), area.getHeight(), WOFL_IMAGE_RECTANGLE_FILLTYPE);
-    g.setColour(WOFL_CONTROLBOX_BORDERCOLOUR);
-    g.drawRoundedRectangle(area.toFloat(), 5.0f, 1.0f);
+    area = area.reduced(lfoControlBoxIntReductionFactor, lfoControlBoxIntReductionFactor);
+    g.setColour(juce::Colours::grey);
+    g.fillRect(area);
+    g.setColour(juce::Colours::black);
+    g.drawRect(area, defaultBorderThickness);
 }
 
 
@@ -104,15 +114,22 @@ void WoflmakerAudioProcessorEditor::resized()
     auto height = area.getHeight();
     auto width = area.getWidth();
 
-    auto appTitleHeight = height * WOFL_APP_TITLE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT;
-    auto panCenterSliderBoxHeight = height * WOFL_PAN_SLIDERBOX_SPACE_HEIGHT_AS_PROPORTION_OF_APP_HEIGHT;
-
     appTitle.setBounds(area.removeFromTop(appTitleHeight));
-    panCenterSliderBox.setBounds(area.removeFromTop(panCenterSliderBoxHeight));
+    panCenterSliderBox.setBounds(area.removeFromTop(mainControlBoxHeight));
 
-    auto deltaX = area.getWidth() * WOFL_APP_SPACE_CONTROLBOX_REDUCTION_FACTOR;
-    auto deltaY = area.getHeight() * WOFL_APP_SPACE_CONTROLBOX_REDUCTION_FACTOR;
-    controlBox.setBounds(area.reduced(deltaX, deltaY));
+    controlBox.setBounds(area.reduced(lfoControlBoxIntReductionFactor, lfoControlBoxIntReductionFactor));
+}
+
+#if USING_IMAGES
+void WoflmakerAudioProcessorEditor::setImages() {
+    appBackgroundImage = 
+}
+#endif
+
+void WoflmakerAudioProcessorEditor::setFonts() {
+    appTitleFont = juce::Font(WOFL_GET_APP_TITLE_FONT);
+    appComponentTitleFont = juce::Font(WOFL_GET_COMPONENT_TITLE_FONT);
+    appDigitalFont = juce::Font(WOFL_GET_DIGITAL_FONT);
 }
 
 // ========================================================================= CONTROL BOX ========================================================================== //

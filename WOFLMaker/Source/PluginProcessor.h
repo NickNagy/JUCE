@@ -9,7 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "RotarySliders.h" // for PAN_MAX_MAGNITUDE
+#include "../../MyJUCEFiles/RotarySliders.h" // for PAN_MAX_MAGNITUDE
 
 #define MAX_LFO_FREQUENCY_HZ 60
 

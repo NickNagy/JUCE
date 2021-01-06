@@ -12,9 +12,10 @@
 #include "PluginProcessor.h"
 #include "WoflmakerEditorStylesheet.h"
 #include "WoflmakerEditorComponents.h"
-#include "RotarySliders.h"
-#include "Attachments.h"
-#include "ComponentBox.h"
+#include "../../MyJUCEFiles/RotarySliders.h"
+#include "../../MyJUCEFiles/Attachments.h"
+#include "../../MyJUCEFiles/Component.h"
+#include "../../MyJUCEFiles/ComponentBox.h"
 
 #define NUM_LFO_FUNCTIONS 4
 
@@ -43,6 +44,15 @@ private:
 		void resized() override;
 	};
 	LFOControlBox controlBox;
+
+	void setImages();
+
+	void setFonts();
+
+	int appTitleHeight = 100;
+	int mainControlBoxHeight = 200;
+	int lfoControlBoxExtHeight = 450;
+	int lfoControlBoxIntReductionFactor = 20;
 	
 	// This reference is provided as a quick way for your editor to
 	// access the processor object that created it.
@@ -50,10 +60,17 @@ private:
 
 	// Look and feel
 	WoflmakerLookAndFeel appLookAndFeel;
-	SliderBoxLookAndFeel sliderBoxLookAndFeel;
 
-	// Title for app
+	// App title
 	juce::Label appTitle;
+
+	// Images
+#if USING_IMAGES
+	juce::Image appBackgroundImage, appTitleBackgroundImage, appControlboxBackgroundImage, appSliderBoxBackgroundImage;
+#endif
+
+	// Fonts
+	juce::Font appTitleFont, appComponentTitleFont, appDigitalFont;
 
 	// Toggle for LFO
 	juce::ToggleButton panCenterLFOToggleButton;

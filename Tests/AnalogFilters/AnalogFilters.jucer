@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="eTDS4f" name="AnalogFilters" projectType="audioplug" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
+  <MAINGROUP id="be2paZ" name="AnalogFilters">
+    <GROUP id="{5DEE2B30-79CF-FBC0-4BEA-1021C7320E6F}" name="Source">
+      <FILE id="RD9ERq" name="PluginProcessor.cpp" compile="1" resource="0"
+            file="Source/PluginProcessor.cpp"/>
+      <FILE id="syOmxP" name="PluginProcessor.h" compile="0" resource="0"
+            file="Source/PluginProcessor.h"/>
+      <FILE id="ZfAuPH" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="Kh2hcm" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+    </GROUP>
+    <GROUP id="{6F78C6B8-1595-8535-F256-C402A7247573}" name="fxobjects">
+      <FILE id="WBy2ZF" name="filters.h" compile="0" resource="0" file="../../../fxobjects/filters.h"/>
+      <FILE id="F0v95I" name="fxobjects.cpp" compile="1" resource="0" file="../../../fxobjects/fxobjects.cpp"/>
+      <FILE id="gsFBi0" name="fxobjects.h" compile="0" resource="0" file="../../../fxobjects/fxobjects.h"/>
+    </GROUP>
+    <GROUP id="{37017C7D-07B2-369D-5D4C-11F51198813C}" name="MyJUCEFiles">
+      <FILE id="KbGC0W" name="AnalogCircuits.h" compile="0" resource="0"
+            file="../../MyJUCEFiles/AnalogCircuits.h"/>
+      <FILE id="OnUHvm" name="Attachments.cpp" compile="1" resource="0" file="../../MyJUCEFiles/Attachments.cpp"/>
+      <FILE id="MVGREX" name="Attachments.h" compile="0" resource="0" file="../../MyJUCEFiles/Attachments.h"/>
+      <FILE id="ePEM3V" name="AudioVisualizers.cpp" compile="1" resource="0"
+            file="../../MyJUCEFiles/AudioVisualizers.cpp"/>
+      <FILE id="o7pOom" name="AudioVisualizers.h" compile="0" resource="0"
+            file="../../MyJUCEFiles/AudioVisualizers.h"/>
+      <FILE id="XoYHAA" name="ColoursAndGradients.cpp" compile="1" resource="0"
+            file="../../MyJUCEFiles/ColoursAndGradients.cpp"/>
+      <FILE id="kSU2at" name="ColoursAndGradients.h" compile="0" resource="0"
+            file="../../MyJUCEFiles/ColoursAndGradients.h"/>
+      <FILE id="a8gflU" name="Component.cpp" compile="1" resource="0" file="../../MyJUCEFiles/Component.cpp"/>
+      <FILE id="kDxqzV" name="Component.h" compile="0" resource="0" file="../../MyJUCEFiles/Component.h"/>
+      <FILE id="MJk30b" name="ComponentBox.cpp" compile="1" resource="0"
+            file="../../MyJUCEFiles/ComponentBox.cpp"/>
+      <FILE id="KSyDzD" name="ComponentBox.h" compile="0" resource="0" file="../../MyJUCEFiles/ComponentBox.h"/>
+      <FILE id="NYTU9i" name="README.md" compile="0" resource="1" file="../../MyJUCEFiles/README.md"/>
+      <FILE id="uQmjmS" name="RotarySliders.cpp" compile="1" resource="0"
+            file="../../MyJUCEFiles/RotarySliders.cpp"/>
+      <FILE id="o2Wekl" name="RotarySliders.h" compile="0" resource="0" file="../../MyJUCEFiles/RotarySliders.h"/>
+      <FILE id="h4YAb8" name="ThreadFunctions.h" compile="0" resource="0"
+            file="../../MyJUCEFiles/ThreadFunctions.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
+  <EXPORTFORMATS>
+    <VS2019 targetFolder="Builds/VisualStudio2019">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="AnalogFilters"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="AnalogFilters"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../../../../../JUCE/modules"/>
+      </MODULEPATHS>
+    </VS2019>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+  <LIVE_SETTINGS>
+    <WINDOWS/>
+  </LIVE_SETTINGS>
+</JUCERPROJECT>

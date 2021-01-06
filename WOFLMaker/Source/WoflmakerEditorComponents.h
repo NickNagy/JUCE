@@ -2,7 +2,7 @@
 #define WOFLMAKEREDITORCOMPONENTS_H
 
 #include <JuceHeader.h>
-#include "RotarySliders.h"
+#include "../../MyJUCEFiles/RotarySliders.h"
 #include "WoflmakerEditorStylesheet.h"
 
 /* To convert the LFO slider(s)' Hz value to a BPM value and display it */
@@ -42,10 +42,6 @@ private:
 // Main app
 struct WoflmakerLookAndFeel : public juce::LookAndFeel_V4 {
 	WoflmakerLookAndFeel();
-};
-
-struct SliderBoxLookAndFeel : public juce::LookAndFeel_V4 {
-	SliderBoxLookAndFeel();
 };
 
 #endif

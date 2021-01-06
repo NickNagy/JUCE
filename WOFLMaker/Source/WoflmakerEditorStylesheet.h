@@ -28,24 +28,42 @@
 #define WOFL_PAN_ROTARY_WIDTHINDICATORCOLOUR_LFO_ENABLED	juce::Colours::yellow
 
 //============================================= IMAGES ================================================//
+
+#define GET_IMAGE(_image_, _size_) juce::ImageCache::getFromMemory(_image_, _size_)
+
 /* Image files */
-#define CAST_IRON_IMAGE juce::ImageCache::getFromMemory(BinaryData::_3806905090_ce4e1f6c7e_o_jpg, BinaryData::_3806905090_ce4e1f6c7e_o_jpgSize)
-#define WAFFLE_IMAGE juce::ImageCache::getFromMemory(BinaryData::wp2418964_jpg, BinaryData::wp2418964_jpgSize)
+#define GET_CAST_IRON_IMAGE GET_IMAGE(BinaryData::_3806905090_ce4e1f6c7e_o_jpg, BinaryData::_3806905090_ce4e1f6c7e_o_jpgSize)
+#define GET_WAFFLE_IMAGE GET_IMAGE(BinaryData::wp2418964_jpg, BinaryData::wp2418964_jpgSize)
 
 /* Fill-type */
 #define WOFL_IMAGE_RECTANGLE_FILLTYPE juce::RectanglePlacement::Flags::stretchToFit
 
 /* App background image */
-#define WOFL_APP_BACKGROUND_IMAGE CAST_IRON_IMAGE
+#define WOFL_GET_APP_BACKGROUND_IMAGE GET_CAST_IRON_IMAGE
 
 /* Pan center sliderbox image */
-#define WOFL_PAN_ROTARY_SLIDERBOX_IMAGE CAST_IRON_IMAGE
+#define WOFL_GET_PAN_ROTARY_SLIDERBOX_IMAGE GET_CAST_IRON_IMAGE
 
 /* App title background image */
-#define WOFL_APP_TITLE_BACKGROUND_IMAGE CAST_IRON_IMAGE
+#define WOFL_GET_APP_TITLE_BACKGROUND_IMAGE GET_CAST_IRON_IMAGE
 
 /* Controlbox background image */
-#define WOFL_CONTROLBOX_BACKGROUND_IMAGE CAST_IRON_IMAGE
+#define WOFL_GET_CONTROLBOX_BACKGROUND_IMAGE GET_CAST_IRON_IMAGE
+
+#define USING_IMAGES 0
+
+//============================================= FONTS =================================================//
+
+#define GET_FONT(_font_, _size_) juce::Typeface::createSystemTypefaceFor(_font_, _size_)
+
+/* App title font */
+#define WOFL_GET_APP_TITLE_FONT GET_FONT(BinaryData::BAUHS93_TTF, BinaryData::BAUHS93_TTFSize)
+
+/* Component title font */
+#define WOFL_GET_COMPONENT_TITLE_FONT GET_FONT(BinaryData::BROADW_TTF, BinaryData::BAUHS93_TTFSize)
+
+/* Digital font */
+#define WOFL_GET_DIGITAL_FONT GET_FONT(BinaryData::OCRAEXT_TTF, BinaryData::OCRAEXT_TTFSize)
 
 //============================================= DIMENSIONS ============================================//
 

@@ -17,8 +17,23 @@ namespace BinaryData
     extern const char*   _3806905090_ce4e1f6c7e_o_jpg;
     const int            _3806905090_ce4e1f6c7e_o_jpgSize = 3173715;
 
+    extern const char*   BAUHS93_TTF;
+    const int            BAUHS93_TTFSize = 47644;
+
+    extern const char*   BERNHC_TTF;
+    const int            BERNHC_TTFSize = 70656;
+
+    extern const char*   BROADW_TTF;
+    const int            BROADW_TTFSize = 60372;
+
+    extern const char*   FORTE_TTF;
+    const int            FORTE_TTFSize = 61776;
+
+    extern const char*   OCRAEXT_TTF;
+    const int            OCRAEXT_TTFSize = 55400;
+
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 3;
+    const int namedResourceListSize = 8;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];

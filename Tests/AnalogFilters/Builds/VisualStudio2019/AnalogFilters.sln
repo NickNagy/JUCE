@@ -1,0 +1,38 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2019
+
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AnalogFilters - Standalone Plugin", "AnalogFilters_StandalonePlugin.vcxproj", "{487ACE4B-4762-B4AE-0A65-0856523FA483}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E837A4CC-DA85-F7BF-A1D2-C1CA8E6EE221} = {E837A4CC-DA85-F7BF-A1D2-C1CA8E6EE221}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AnalogFilters - VST3", "AnalogFilters_VST3.vcxproj", "{0C4E219B-531A-00E8-E2CE-D4CC7A498E12}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E837A4CC-DA85-F7BF-A1D2-C1CA8E6EE221} = {E837A4CC-DA85-F7BF-A1D2-C1CA8E6EE221}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AnalogFilters - Shared Code", "AnalogFilters_SharedCode.vcxproj", "{E837A4CC-DA85-F7BF-A1D2-C1CA8E6EE221}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0C4E219B-531A-00E8-E2CE-D4CC7A498E12}.Debug|x64.ActiveCfg = Debug|x64
+		{0C4E219B-531A-00E8-E2CE-D4CC7A498E12}.Debug|x64.Build.0 = Debug|x64
+		{0C4E219B-531A-00E8-E2CE-D4CC7A498E12}.Release|x64.ActiveCfg = Release|x64
+		{0C4E219B-531A-00E8-E2CE-D4CC7A498E12}.Release|x64.Build.0 = Release|x64
+		{487ACE4B-4762-B4AE-0A65-0856523FA483}.Debug|x64.ActiveCfg = Debug|x64
+		{487ACE4B-4762-B4AE-0A65-0856523FA483}.Debug|x64.Build.0 = Debug|x64
+		{487ACE4B-4762-B4AE-0A65-0856523FA483}.Release|x64.ActiveCfg = Release|x64
+		{487ACE4B-4762-B4AE-0A65-0856523FA483}.Release|x64.Build.0 = Release|x64
+		{E837A4CC-DA85-F7BF-A1D2-C1CA8E6EE221}.Debug|x64.ActiveCfg = Debug|x64
+		{E837A4CC-DA85-F7BF-A1D2-C1CA8E6EE221}.Debug|x64.Build.0 = Debug|x64
+		{E837A4CC-DA85-F7BF-A1D2-C1CA8E6EE221}.Release|x64.ActiveCfg = Release|x64
+		{E837A4CC-DA85-F7BF-A1D2-C1CA8E6EE221}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -21,9 +21,3 @@ WoflmakerLookAndFeel::WoflmakerLookAndFeel() {
     setColour(juce::ResizableWindow::backgroundColourId, WOFL_APP_BACKGROUNDCOLOUR);
     setColour(juce::Label::textColourId, WOFL_APP_TITLE_TEXTCOLOUR);
 }
-
-// Slider boxes
-SliderBoxLookAndFeel::SliderBoxLookAndFeel() {
-    setColour(juce::ResizableWindow::backgroundColourId, juce::Colours::black);
-    setColour(juce::Label::textColourId, juce::Colours::yellow);
-}

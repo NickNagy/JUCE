@@ -12,6 +12,12 @@
       <FILE id="ayfzgk" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="mWn9vw" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="TryEMF" name="WoflmakerEditorComponents.cpp" compile="1"
+            resource="0" file="Source/WoflmakerEditorComponents.cpp"/>
+      <FILE id="ahnDwM" name="WoflmakerEditorComponents.h" compile="0" resource="0"
+            file="Source/WoflmakerEditorComponents.h"/>
+      <FILE id="W9VLqP" name="WoflmakerEditorStylesheet.h" compile="0" resource="0"
+            file="Source/WoflmakerEditorStylesheet.h"/>
     </GROUP>
     <GROUP id="{58C12056-F44A-6844-DD49-EC2EDDB522B0}" name="MyJUCEFiles">
       <FILE id="UsSbVl" name="Attachments.cpp" compile="1" resource="0" file="../MyJUCEFiles/Attachments.cpp"/>
@@ -39,6 +45,11 @@
     <FILE id="UP6WSr" name="wp2418964.jpg" compile="0" resource="1" file="../../../../Desktop/wp2418964.jpg"/>
     <FILE id="BOGCjg" name="3806905090_ce4e1f6c7e_o.jpg" compile="0" resource="1"
           file="../../../../Desktop/3806905090_ce4e1f6c7e_o.jpg"/>
+    <FILE id="kjhnT4" name="BAUHS93.TTF" compile="0" resource="1" file="../../../../../../WINDOWS/Fonts/BAUHS93.TTF"/>
+    <FILE id="e9Rd4D" name="BERNHC.TTF" compile="0" resource="1" file="../../../../../../WINDOWS/Fonts/BERNHC.TTF"/>
+    <FILE id="IwGNbq" name="BROADW.TTF" compile="0" resource="1" file="../../../../../../WINDOWS/Fonts/BROADW.TTF"/>
+    <FILE id="yYGWB4" name="FORTE.TTF" compile="0" resource="1" file="../../../../../../WINDOWS/Fonts/FORTE.TTF"/>
+    <FILE id="z2xSu3" name="OCRAEXT.TTF" compile="0" resource="1" file="../../../../../../WINDOWS/Fonts/OCRAEXT.TTF"/>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>
